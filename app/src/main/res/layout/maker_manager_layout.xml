@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00bfff">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextAppearance="@style/Toolbar.TitleText"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/editDataBtm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="修改数据"
+            android:textSize="24sp"/>
+
+        <Button
+            android:id="@+id/outStoreBtm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/editDataBtm"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="20dp"
+            android:text="出库操作"
+            android:textSize="24sp"/>
+
+        <Button
+            android:id="@+id/intoStoreBtm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/outStoreBtm"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="20dp"
+            android:text="入库操作"
+            android:textSize="24sp"/>
+
+        <Button
+            android:id="@+id/listDataBtm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editDataBtm"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:text="查询操作"
+            android:textSize="24sp"/>
+
+        <Button
+            android:id="@+id/outMakeManager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listDataBtm"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:text="退出程序"
+            android:textSize="24sp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

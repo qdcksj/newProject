@@ -26,88 +26,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <Button
+            android:id="@+id/delColorWork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
             android:textSize="20sp"
-            android:text="建设中......"/>
+            android:text="删除颜色名称"/>
+
+        <Button
+            android:id="@+id/delProduName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/delColorWork"
+            android:textSize="20sp"
+            android:text="删除产品名称"/>
+
+
     </RelativeLayout>
-    <!--
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:text="选择工序："/>
-            <Spinner
-                android:id="@+id/upTypeSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"/>
-            <TextView
-                android:id="@+id/upTypeName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:textSize="25sp"
-                android:hint="请选择工序名称"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:text="选择品名："/>
-            <Spinner
-                android:id="@+id/upNameSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"/>
-            <TextView
-                android:id="@+id/upProduName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:textSize="25sp"
-                android:hint="请选择产品名称"/>
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:text="选择颜色："/>
-            <Spinner
-                android:id="@+id/upColorSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"/>
-            <TextView
-                android:id="@+id/upColorName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:textSize="25sp"
-                android:hint="请选择颜色名称"/>
-        </LinearLayout>
-    </LinearLayout>
--->
 </LinearLayout>

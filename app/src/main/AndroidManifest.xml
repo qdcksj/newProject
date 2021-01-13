@@ -12,6 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".DelColor"
+            android:label="青岛成凯塑胶包装制品有限公司" >
+        </activity>
+        <activity android:name=".DelProduName"
+            android:label="青岛成凯塑胶包装制品有限公司" >
+        </activity>
         <activity android:name=".QueryOut"
             android:label="青岛成凯塑胶包装制品有限公司" >
         </activity>

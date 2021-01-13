@@ -1,5 +1,6 @@
 package com.example.productmanagement
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.os.Message
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.query_in_layout.*
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
@@ -26,24 +28,17 @@ import kotlin.concurrent.thread
 @Suppress("DEPRECATION")
 class QueryIn : BaseActivity()  {
     val dbHelper = ProduDatabaseHelper(this, "nativeBases", 1)
-    val queryInList = ArrayList<QueryProdu>()
-    val queryChuisuList = ArrayList<QueryChuisuProdu>()
+    private val queryChuisuList = ArrayList<QueryChuisuProdu>()
     val updateList = 1
-    val handler1 = object : Handler(){
+    private val handler1 = @SuppressLint("HandlerLeak")
+    object : Handler(){
         override fun handleMessage(msg1: Message) {
             when (msg1.what){
                 updateList -> adaper1()
+            }
+        }
+    }
 
-            }
-        }
-    }
-    val handler2 = object : Handler(){
-        override fun handleMessage(msg2: Message) {
-            when (msg2.what){
-                updateList -> adaper2()
-            }
-        }
-    }
             override fun onCreate(savedInstanceState: Bundle?) {
          super.onCreate(savedInstanceState)
          setContentView(R.layout.query_in_layout)
@@ -58,44 +53,35 @@ class QueryIn : BaseActivity()  {
         val queryType = inTypeName.text
         thread {
             scope.launch {
-                if (queryType == "瓶坯注塑"){
-                    queryInpingpi()
-                }else if (queryType == "非瓶坯注塑"){
-                    queryInNopingpi()
-                }else if (queryType == "吹塑"){
-                    queryInchuisu()
-                }else if (queryType == "挤出"){
-                    queryInjichu()
-                }else if (queryType == "其他"){
-                    queryInother()
+                when (queryType) {
+                    "瓶坯注塑" -> {
+                        queryInpingpi()
+                    }
+                    "非瓶坯注塑" -> {
+                        queryInNopingpi()
+                    }
+                    "吹塑" -> {
+                        queryInchuisu()
+                    }
+                    "挤出" -> {
+                        queryInjichu()
+                    }
+                    "其他" -> {
+                        queryInother()
+                    }
+                    //println("协程运行完")
                 }
                 //println("协程运行完")
             }
             scope.launch {
-                if (queryType == "吹塑"){
-                    val msg2 = Message()
-                    msg2.what = updateList
-                    delay(1000)
-                    handler2.sendMessage(msg2)
-                }else{
                     val msg1 = Message()
                     msg1.what = updateList
                     delay(1000)
                     handler1.sendMessage(msg1)
                     //println("handler运行")
-                }
             }
             job.cancel()
         }
-    }
-
-    //选择开始日期
-    selectStartDate.setOnClickListener {
-        buttonFunc1(R.id.startDate)
-    }
-    //选择结束日期
-    selectLastDate.setOnClickListener {
-        buttonFunc2(R.id.lastDate)
     }
 
 }
@@ -116,12 +102,8 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
 }
 
     private fun adaper1(){
-        val adapter1 = QueryProduAdapter(this, R.layout.query_produ_item, queryInList)
+        val adapter1 = QueryChuisuAdapter(this, R.layout.query_chuisu_item, queryChuisuList)
         listQueryInView.adapter = adapter1
-    }
-    private fun adaper2(){
-        val adapter2 = QueryChuisuAdapter(this, R.layout.query_chuisu_item, queryChuisuList)
-        listQueryInView.adapter = adapter2
     }
 
     //查询瓶坯入库日期及数量等
@@ -133,7 +115,8 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
         try {
             thread {
                     val conn = DBUtil().conection()
-                    if (date1 == date2){
+                when {
+                    date1 == date2 -> {
                         val sql = "SELECT * FROM zhusuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
                         try {
                             // 创建用来执行sql语句的对象
@@ -144,13 +127,14 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
                                 val amount = rSet.getString("shuliang")
                                 val menu = rSet.getString("menu")
                                 val date = rSet.getString("riqi")
-                                queryInList.add(QueryProdu("$date", "$amount", "$menu"))
+                                queryChuisuList.add(QueryChuisuProdu(date, amount,"无", menu))
                                 Log.d("QueryIn", "浏览入库数据成功1")
                             }
                         }catch (e:Exception){
                             e.printStackTrace()
                         }
-                    }else if (date1 < date2){
+                    }
+                    date1 < date2 -> {
                         val sql = "SELECT * FROM zhusuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
                         try {
                             // 创建用来执行sql语句的对象
@@ -162,17 +146,19 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
                                 val amount = rSet.getString("shuliang")
                                 val menu = rSet.getString("menu")
                                 val date = rSet.getString("riqi")
-                                queryInList.add(QueryProdu("$date", "$amount", "$menu"))
+                                queryChuisuList.add(QueryChuisuProdu(date, amount,"无", menu))
                                 Log.d("QueryIn", "浏览入库数据成功2")
                             }
                         }catch (e:Exception){
                             e.printStackTrace()
                         }
 
-                    }else {
+                    }
+                    else -> {
                         Log.d("QueryIn", "截止日期在开始日期之前了")
                         Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
                     }
+                }
                     try {
                         conn!!.close()
                         //Log.d("MakeManager", "关闭连接成功。")
@@ -187,7 +173,7 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
     }
     //查询非瓶坯入库数
     private fun queryInNopingpi(){
-        val queryInList = ArrayList<QueryProdu>()
+
         val date1 = startDate.text.toString()
         val date2 = lastDate.text.toString()
         val queryInName = inProduName.text
@@ -195,43 +181,47 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (date1 == date2){
-                    val sql = "SELECT * FROM zhusuotherintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
-                    try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn!!.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val rSet: ResultSet = statement.executeQuery(sql)
-                        while (rSet.next()){
-                            val amount = rSet.getString("shuliang")
-                            val menu = rSet.getString("menu")
-                            val date = rSet.getString("riqi")
-                            queryInList.add(QueryProdu("$date", "$amount", "$menu"))
-                            //Log.d("QueryIn", "浏览入库数据成功1")
+                when {
+                    date1 == date2 -> {
+                        val sql = "SELECT * FROM zhusuotherintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
+                        try {
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn!!.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val rSet: ResultSet = statement.executeQuery(sql)
+                            while (rSet.next()){
+                                val amount = rSet.getString("shuliang")
+                                val menu = rSet.getString("menu")
+                                val date = rSet.getString("riqi")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount,"无", menu))
+                                //Log.d("QueryIn", "浏览入库数据成功1")
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
                         }
-                    }catch (e:Exception){
-                        e.printStackTrace()
                     }
-                }else if (date1 < date2){
-                    val sql = "SELECT * FROM zhusuotherintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
-                    try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn!!.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val rSet: ResultSet = statement.executeQuery(sql)
-                        while (rSet.next()){
-                            val amount = rSet.getString("shuliang")
-                            val menu = rSet.getString("menu")
-                            val date = rSet.getString("riqi")
-                            queryInList.add(QueryProdu("$date", "$amount", "$menu"))
-                            //Log.d("QueryIn", "浏览入库数据成功2")
+                    date1 < date2 -> {
+                        val sql = "SELECT * FROM zhusuotherintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
+                        try {
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn!!.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val rSet: ResultSet = statement.executeQuery(sql)
+                            while (rSet.next()){
+                                val amount = rSet.getString("shuliang")
+                                val menu = rSet.getString("menu")
+                                val date = rSet.getString("riqi")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount,"无", menu))
+                                //Log.d("QueryIn", "浏览入库数据成功2")
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
                         }
-                    }catch (e:Exception){
-                        e.printStackTrace()
                     }
-                }else {
-                    //Log.d("QueryIn", "截止日期在开始日期之前了")
-                    Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
+                    else -> {
+                        //Log.d("QueryIn", "截止日期在开始日期之前了")
+                        Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 try {
                     conn!!.close()
@@ -253,45 +243,49 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (date1 == date2){
-                    val sql = "SELECT * FROM chuisuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
-                    try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn!!.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val rSet: ResultSet = statement.executeQuery(sql)
-                        while (rSet.next()){
-                            val amount = rSet.getString("shuliang")
-                            val menu = rSet.getString("menu")
-                            val date = rSet.getString("riqi")
-                            val weight = rSet.getString("pingpiname")
-                            queryChuisuList.add(QueryChuisuProdu("$date", "$amount", "$weight","$menu"))
-                            Log.d("QueryIn", "浏览入库数据成功1")
+                when {
+                    date1 == date2 -> {
+                        val sql = "SELECT * FROM chuisuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
+                        try {
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn!!.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val rSet: ResultSet = statement.executeQuery(sql)
+                            while (rSet.next()){
+                                val amount = rSet.getString("shuliang")
+                                val menu = rSet.getString("menu")
+                                val date = rSet.getString("riqi")
+                                val weight = rSet.getString("pingpiname")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount, weight, menu))
+                                Log.d("QueryIn", "浏览入库数据成功1")
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
                         }
-                    }catch (e:Exception){
-                        e.printStackTrace()
                     }
-                }else if (date1 < date2){
-                    val sql = "SELECT * FROM chuisuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
-                    try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn!!.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val rSet: ResultSet = statement.executeQuery(sql)
-                        while (rSet.next()){
-                            val amount = rSet.getString("shuliang")
-                            val menu = rSet.getString("menu")
-                            val date = rSet.getString("riqi")
-                            val weight = rSet.getString("pingpiname")
-                            queryChuisuList.add(QueryChuisuProdu("$date", "$amount", "$weight","$menu"))
-                            //Log.d("QueryIn", "浏览入库数据成功2")
+                    date1 < date2 -> {
+                        val sql = "SELECT * FROM chuisuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
+                        try {
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn!!.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val rSet: ResultSet = statement.executeQuery(sql)
+                            while (rSet.next()){
+                                val amount = rSet.getString("shuliang")
+                                val menu = rSet.getString("menu")
+                                val date = rSet.getString("riqi")
+                                val weight = rSet.getString("pingpiname")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount, weight, menu))
+                                //Log.d("QueryIn", "浏览入库数据成功2")
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
                         }
-                    }catch (e:Exception){
-                        e.printStackTrace()
                     }
-                }else {
-                    //Log.d("QueryIn", "截止日期在开始日期之前了")
-                    Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
+                    else -> {
+                        //Log.d("QueryIn", "截止日期在开始日期之前了")
+                        Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 try {
                     conn!!.close()
@@ -314,45 +308,49 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (date1 == date2){
-                    val sql = "SELECT * FROM jichuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
-                    try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn!!.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val rSet: ResultSet = statement.executeQuery(sql)
-                        while (rSet.next()){
-                            val amount = rSet.getString("shuliang")
-                            val menu = rSet.getString("menu")
-                            val date = rSet.getString("riqi")
-                            queryInList.add(QueryProdu("$date", "$amount", "$menu"))
-                            //Log.d("QueryIn", "浏览入库数据成功1")
+                when {
+                    date1 == date2 -> {
+                        val sql = "SELECT * FROM jichuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
+                        try {
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn!!.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val rSet: ResultSet = statement.executeQuery(sql)
+                            while (rSet.next()){
+                                val amount = rSet.getString("shuliang")
+                                val menu = rSet.getString("menu")
+                                val date = rSet.getString("riqi")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount,"无", menu))
+                                //Log.d("QueryIn", "浏览入库数据成功1")
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
                         }
-                    }catch (e:Exception){
-                        e.printStackTrace()
                     }
-                }else if (date1 < date2){
-                    val sql = "SELECT * FROM jichuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
-                    try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn!!.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val rSet: ResultSet = statement.executeQuery(sql)
+                    date1 < date2 -> {
+                        val sql = "SELECT * FROM jichuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
+                        try {
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn!!.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val rSet: ResultSet = statement.executeQuery(sql)
 
-                        while (rSet.next()){
-                            val amount = rSet.getString("shuliang")
-                            val menu = rSet.getString("menu")
-                            val date = rSet.getString("riqi")
-                            queryInList.add(QueryProdu("$date", "$amount", "$menu"))
-                            //Log.d("QueryIn", "浏览入库数据成功2")
+                            while (rSet.next()){
+                                val amount = rSet.getString("shuliang")
+                                val menu = rSet.getString("menu")
+                                val date = rSet.getString("riqi")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount,"无", menu))
+                                //Log.d("QueryIn", "浏览入库数据成功2")
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
                         }
-                    }catch (e:Exception){
-                        e.printStackTrace()
-                    }
 
-                }else {
-                    //Log.d("QueryIn", "截止日期在开始日期之前了")
-                    Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        //Log.d("QueryIn", "截止日期在开始日期之前了")
+                        Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 try {
                     conn!!.close()
@@ -375,45 +373,49 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (date1 == date2){
-                    val sql = "SELECT * FROM otherintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
-                    try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn!!.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val rSet: ResultSet = statement.executeQuery(sql)
-                        while (rSet.next()){
-                            val amount = rSet.getString("shuliang")
-                            val menu = rSet.getString("menu")
-                            val date = rSet.getString("riqi")
-                            queryInList.add(QueryProdu("$date", "$amount", "$menu"))
-                            Log.d("QueryIn", "浏览入库数据成功1")
+                when {
+                    date1 == date2 -> {
+                        val sql = "SELECT * FROM otherintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
+                        try {
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn!!.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val rSet: ResultSet = statement.executeQuery(sql)
+                            while (rSet.next()){
+                                val amount = rSet.getString("shuliang")
+                                val menu = rSet.getString("menu")
+                                val date = rSet.getString("riqi")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount,"无", menu))
+                                Log.d("QueryIn", "浏览入库数据成功1")
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
                         }
-                    }catch (e:Exception){
-                        e.printStackTrace()
                     }
-                }else if (date1 < date2){
-                    val sql = "SELECT * FROM otherintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
-                    try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn!!.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val rSet: ResultSet = statement.executeQuery(sql)
+                    date1 < date2 -> {
+                        val sql = "SELECT * FROM otherintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
+                        try {
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn!!.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val rSet: ResultSet = statement.executeQuery(sql)
 
-                        while (rSet.next()){
-                            val amount = rSet.getString("shuliang")
-                            val menu = rSet.getString("menu")
-                            val date = rSet.getString("riqi")
-                            queryInList.add(QueryProdu("$date", "$amount", "$menu"))
-                            Log.d("QueryIn", "浏览入库数据成功2")
+                            while (rSet.next()){
+                                val amount = rSet.getString("shuliang")
+                                val menu = rSet.getString("menu")
+                                val date = rSet.getString("riqi")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount,"无", menu))
+                                Log.d("QueryIn", "浏览入库数据成功2")
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
                         }
-                    }catch (e:Exception){
-                        e.printStackTrace()
-                    }
 
-                }else {
-                    Log.d("QueryIn", "截止日期在开始日期之前了")
-                    Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        Log.d("QueryIn", "截止日期在开始日期之前了")
+                        Toast.makeText(this, "截止日期不对", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 try {
                     conn!!.close()
@@ -444,17 +446,22 @@ private fun initTypeSpinner(){
         selector("选择工序名称", typeList){i ->
             inTypeName.text = typeList[i]
 
-            val queryType = inTypeName.text
-            if (queryType == "瓶坯注塑"){
-                initZhusuSpinner()
-            }else if (queryType == "非瓶坯注塑"){
-                initOtherZhusuSpinner()
-            }else if (queryType == "吹塑"){
-                initChuisuSpinner()
-            }else if (queryType == "挤出"){
-                initJichuSpinner()
-            }else if (queryType == "其他"){
-                initOtherSpinner()
+            when (inTypeName.text) {
+                "瓶坯注塑" -> {
+                    initZhusuSpinner()
+                }
+                "非瓶坯注塑" -> {
+                    initOtherZhusuSpinner()
+                }
+                "吹塑" -> {
+                    initChuisuSpinner()
+                }
+                "挤出" -> {
+                    initJichuSpinner()
+                }
+                "其他" -> {
+                    initOtherSpinner()
+                }
             }
         }
     }
@@ -576,50 +583,59 @@ private fun initColorSpinner(){
 
 
 //日期选择器
-private fun buttonFunc1(view:Int) {
+ fun buttonFunc1(view:View) {
+    when(view.id){
+        R.id.startDate ->{
+            val ca = Calendar.getInstance()
+            var mYear = ca[Calendar.YEAR]
+            var mMonth = ca[Calendar.MONTH]
+            var mDay = ca[Calendar.DAY_OF_MONTH]
 
-    val ca = Calendar.getInstance()
-    var mYear = ca[Calendar.YEAR]
-    var mMonth = ca[Calendar.MONTH]
-    var mDay = ca[Calendar.DAY_OF_MONTH]
+            val datePickerDialog = DatePickerDialog(
+                this,
+                AlertDialog.THEME_HOLO_DARK,
+                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                    mYear = year
+                    mMonth = month
+                    mDay = dayOfMonth
+                    val mDate = "${year}-${month + 1}-${dayOfMonth}"
+                    // 将选择的日期赋值给TextView
+                    startDate.text = mDate
+                },
+                mYear, mMonth, mDay
+            )
+            datePickerDialog.show()
+        }
+    }
 
-    val datePickerDialog = DatePickerDialog(
-        this,
-        AlertDialog.THEME_HOLO_DARK,
-        DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            mYear = year
-            mMonth = month
-            mDay = dayOfMonth
-            val mDate = "${year}-${month + 1}-${dayOfMonth}"
-            // 将选择的日期赋值给TextView
-            startDate.text = mDate
-        },
-        mYear, mMonth, mDay
-    )
-    datePickerDialog.show()
 }
-private fun buttonFunc2(view:Int) {
+fun buttonFunc2(view:View) {
+    when (view.id) {
+        R.id.lastDate -> {
+            val ca = Calendar.getInstance()
+            var mYear = ca[Calendar.YEAR]
+            var mMonth = ca[Calendar.MONTH]
+            var mDay = ca[Calendar.DAY_OF_MONTH]
 
-    val ca = Calendar.getInstance()
-    var mYear = ca[Calendar.YEAR]
-    var mMonth = ca[Calendar.MONTH]
-    var mDay = ca[Calendar.DAY_OF_MONTH]
+            val datePickerDialog = DatePickerDialog(
+                this,
+                AlertDialog.THEME_HOLO_DARK,
+                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                    mYear = year
+                    mMonth = month
+                    mDay = dayOfMonth
+                    val mDate = "${year}-${month + 1}-${dayOfMonth}"
+                    // 将选择的日期赋值给TextView
+                    lastDate.text = mDate
+                },
+                mYear, mMonth, mDay
+            )
+            datePickerDialog.show()
+        }
+    }
+}
 
-    val datePickerDialog = DatePickerDialog(
-        this,
-        AlertDialog.THEME_HOLO_DARK,
-        DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            mYear = year
-            mMonth = month
-            mDay = dayOfMonth
-            val mDate = "${year}-${month + 1}-${dayOfMonth}"
-            // 将选择的日期赋值给TextView
-            lastDate.text = mDate
-        },
-        mYear, mMonth, mDay
-    )
-    datePickerDialog.show()
 }
-}
+
 
 

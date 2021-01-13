@@ -31,6 +31,7 @@ class OutBound : BaseActivity(){
          }
         OkButton.setOnClickListener {
             outSave()
+            "产品出库成功！".showToast()
         }
 
     }

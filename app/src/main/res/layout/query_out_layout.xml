@@ -135,7 +135,7 @@
             android:id="@+id/startDateOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="buttonFunc"
+            android:onClick="buttonFunc3"
             android:layout_marginRight="5dp"
             android:background="#7AFEC6"
             android:textSize="20sp"/>
@@ -156,7 +156,7 @@
             android:id="@+id/lastDateOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="buttonFunc"
+            android:onClick="buttonFunc4"
             android:layout_marginRight="5dp"
             android:background="#7AFEC6"
             android:textSize="20sp"/>

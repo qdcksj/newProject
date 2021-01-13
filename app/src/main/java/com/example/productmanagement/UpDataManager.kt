@@ -1,16 +1,26 @@
 package com.example.productmanagement
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.super_manager_layout.*
+import kotlinx.android.synthetic.main.super_manager_layout.toolbar
+import kotlinx.android.synthetic.main.up_data_manager_layout.*
 
 class UpDataManager : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.up_data_manager_layout)
         setSupportActionBar(toolbar)
+
+        delColorWork.setOnClickListener {
+            val intent = Intent(this, DelColor::class.java)
+            startActivity(intent)
+        }
+        delProduName.setOnClickListener {
+            val intent = Intent(this, DelProduName::class.java)
+            startActivity(intent)
+        }
 
     }
     //toolbar点击事件

@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#228b22"
-            android:text="@string/selectType"
+            android:text="选择工序名称："
             android:textSize="20sp"/>
         <Spinner
             android:id="@+id/typeSpinnerWork"
@@ -85,7 +85,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/btm2red"
-            android:text="删除选中的颜色"/>
+            android:text="删除选中的产品名称"/>
 
 
     </LinearLayout>

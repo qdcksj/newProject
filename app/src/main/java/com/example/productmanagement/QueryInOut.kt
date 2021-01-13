@@ -29,18 +29,10 @@ class QueryInOut : BaseActivity() {
             titleBtm.setOnClickListener {
                 val sumIn = queryInTitle.text.toString()
                 val sumOut = queryOutTitle.text.toString()
-                if (sumIn !== null){
-                    println("库存数1：" + "$sumIn")
-                    if (sumOut !== null){
-                        println("库存数2：" + "$sumOut")
-                        val sumAll = sumIn.toInt() - sumOut.toInt()
-                        queryAllTitle.text = sumAll.toString()
-                    }else{
-                        println("无出库数据")
-                    }
-                }else {
-                    println("无入库数据")
-                }
+                //println("库存数1：" + "$sumIn")
+                //println("库存数2：" + "$sumOut")
+                val sumAll = sumIn.toInt() - sumOut.toInt()
+                queryAllTitle.text = sumAll.toString()
             }
         }
         finishButton.setOnClickListener {

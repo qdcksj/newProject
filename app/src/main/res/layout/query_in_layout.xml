@@ -85,7 +85,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="15dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -121,48 +121,51 @@
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <TextView
             android:id="@+id/selectStartDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="点此选开始日期"/>
+            android:text="选择开始日期："/>
 
         <TextView
             android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="buttonFunc"
-            android:layout_marginRight="5dp"
+            android:onClick="buttonFunc1"
+            android:layout_marginRight="35dp"
             android:background="#7AFEC6"
             android:textSize="20sp"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <TextView
             android:id="@+id/selectLastDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="点此选截止日期"/>
+            android:text="选择截止日期："/>
 
         <TextView
             android:id="@+id/lastDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="buttonFunc"
-            android:layout_marginRight="5dp"
+            android:onClick="buttonFunc2"
+            android:layout_marginRight="35dp"
             android:background="#7AFEC6"
             android:textSize="20sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView

@@ -20,6 +20,13 @@
         android:text="选择需要删除的颜色，按删除键"
         android:textSize="20sp"/>
 
+    <Button
+        android:id="@+id/queryColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="显示颜色名称"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="10dp"

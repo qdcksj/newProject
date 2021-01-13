@@ -123,27 +123,24 @@ class OutBound : BaseActivity(){
                                     val num = statement.executeUpdate(sql)
                                     if (num > 0){
                                         Log.d("OutBound","已添加到远程瓶坯注塑出库")
-                                    }else{
-                                        Log.d("OutBound","未添加到远程瓶坯注塑出库")
                                     }
                                 } catch (e: SQLException) {
-                                    Log.e("OutBound", "远程出库瓶坯注塑名称插入失败")
+                                    //Log.e("OutBound", "远程出库瓶坯注塑名称插入失败")
                                 }
 
                                 //关闭数据库
                                 try {
                                     conn!!.close()
-                                    Log.d("OutBound", "关闭连接成功。")
+                                    //Log.d("OutBound", "关闭连接成功。")
                                 } catch (e: SQLException) {
-                                    Log.d("OutBound", "关闭连接失败。")
+                                    //Log.d("OutBound", "关闭连接失败。")
                                 }
 
                             }.start()
                         }catch (e:Exception){
                             e.printStackTrace()
-                        }
-
                     }
+                }
                     "非瓶坯注塑" -> {
                         try {
                             Thread {
@@ -156,19 +153,17 @@ class OutBound : BaseActivity(){
                                     val num = statement.executeUpdate(sql)
                                     if (num > 0){
                                         Log.d("OutBound","已添加到远程瓶坯注塑出库")
-                                    }else{
-                                        Log.d("OutBound","未添加到远程瓶坯注塑出库")
                                     }
                                 } catch (e: SQLException) {
-                                    Log.e("OutBound", "远程出库瓶坯注塑插入失败")
+                                    //Log.e("OutBound", "远程出库瓶坯注塑插入失败")
                                 }
 
                                 //关闭数据库
                                 try {
                                     conn!!.close()
-                                    Log.d("OutBound", "关闭连接成功。")
+                                    //Log.d("OutBound", "关闭连接成功。")
                                 } catch (e: SQLException) {
-                                    Log.d("OutBound", "关闭连接失败。")
+                                    //Log.d("OutBound", "关闭连接失败。")
                                 }
 
                             }.start()
@@ -188,19 +183,17 @@ class OutBound : BaseActivity(){
                                     val num = statement.executeUpdate(sql)
                                     if (num > 0){
                                         Log.d("OutBound","已添加到远程瓶坯吹塑出库")
-                                    }else{
-                                        Log.d("OutBound","未添加到远程瓶坯吹塑出库")
                                     }
                                 } catch (e: SQLException) {
-                                    Log.e("OutBound", "远程出库吹塑插入失败")
+                                    //Log.e("OutBound", "远程出库吹塑插入失败")
                                 }
 
                                 //关闭数据库
                                 try {
                                     conn!!.close()
-                                    Log.d("OutBound", "关闭连接成功。")
+                                    //Log.d("OutBound", "关闭连接成功。")
                                 } catch (e: SQLException) {
-                                    Log.d("OutBound", "关闭连接失败。")
+                                    //Log.d("OutBound", "关闭连接失败。")
                                 }
 
                             }.start()
@@ -220,19 +213,17 @@ class OutBound : BaseActivity(){
                                     val num = statement.executeUpdate(sql)
                                     if (num > 0){
                                         Log.d("OutBound","已添加到远程挤出出库")
-                                    }else{
-                                        Log.d("OutBound","未添加到远程挤出出库")
                                     }
                                 } catch (e: SQLException) {
-                                    Log.e("OutBound", "远程出库挤出插入失败")
+                                    //Log.e("OutBound", "远程出库挤出插入失败")
                                 }
 
                                 //关闭数据库
                                 try {
                                     conn!!.close()
-                                    Log.d("OutBound", "关闭连接成功。")
+                                    //Log.d("OutBound", "关闭连接成功。")
                                 } catch (e: SQLException) {
-                                    Log.d("OutBound", "关闭连接失败。")
+                                    //Log.d("OutBound", "关闭连接失败。")
                                 }
 
                             }.start()
@@ -252,19 +243,17 @@ class OutBound : BaseActivity(){
                                     val num = statement.executeUpdate(sql)
                                     if (num > 0){
                                         Log.d("OutBound","已添加到远程其他出库")
-                                    }else{
-                                        Log.d("OutBound","未添加到远程其他出库")
                                     }
                                 } catch (e: SQLException) {
-                                    Log.e("OutBound", "远程出库其他插入失败")
+                                    //Log.e("OutBound", "远程出库其他插入失败")
                                 }
 
                                 //关闭数据库
                                 try {
                                     conn!!.close()
-                                    Log.d("OutBound", "关闭连接成功。")
+                                    //Log.d("OutBound", "关闭连接成功。")
                                 } catch (e: SQLException) {
-                                    Log.d("OutBound", "关闭连接失败。")
+                                    //Log.d("OutBound", "关闭连接失败。")
                                 }
 
                             }.start()
@@ -296,7 +285,7 @@ class OutBound : BaseActivity(){
         val values = contentValuesOf("lineName" to "$line","produName" to " $produName", "pingpiName" to "$pingpiNM", "produColor" to "$colorNM",
             "outAmount" to "$outPro", "produMenu" to "$menuPro")
         db.insert("nativeOutTable", null, values)
-        Log.d("OutBound", "本地临时库已更新")
+        //Log.d("OutBound", "本地临时库已更新")
     }
 
     //查询临时数据库并列表显示
@@ -308,7 +297,7 @@ class OutBound : BaseActivity(){
 
             val adapter = OutProduAdapter(this,R.layout.out_produ_item, outProduList)
             tempListView.adapter = adapter
-            Log.d("OutBound", "列表已更新")
+            //Log.d("OutBound", "列表已更新")
 
             tempListView.setOnItemClickListener { _, _, position, _ ->
                 val selectLine = outProduList[position]

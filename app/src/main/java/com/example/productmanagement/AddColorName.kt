@@ -22,6 +22,7 @@ class AddColorName : BaseActivity() {
 
         addNewColorPM.setOnClickListener {
             addNewColor()
+            "添加颜色成功！".showToast()
         }
         listColorPM.setOnClickListener {
             listColorName()
@@ -63,19 +64,17 @@ class AddColorName : BaseActivity() {
                     val num = statement.executeUpdate(sql)
                     if (num > 0){
                         Log.d("AddColorName","已添加到远程注塑库")
-                    }else{
-                        Log.d("AddColorName","已添加到远程注塑库")
                     }
                 } catch (e: SQLException) {
-                    Log.e("AddColorName", "远程注塑名称插入失败")
+                   // Log.e("AddColorName", "远程注塑名称插入失败")
                 }
 
                 //关闭数据库
                 try {
                     conn!!.close()
-                    Log.d("AddColorName", "关闭连接成功。")
+                    //Log.d("AddColorName", "关闭连接成功。")
                 } catch (e: SQLException) {
-                    Log.d("AddColorName", "关闭连接失败。")
+                    //Log.d("AddColorName", "关闭连接失败。")
                 }
 
             }.start()

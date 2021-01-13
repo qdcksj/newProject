@@ -25,6 +25,7 @@ class AddProduName : BaseActivity() {
         //添加产品按键点击
         addNewPM.setOnClickListener {
             addNewProdu()
+            "添加产品名称成功！"
         }
 
         //显示产品目录点击

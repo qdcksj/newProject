@@ -25,7 +25,7 @@ class MakeManager : BaseActivity() {
         setSupportActionBar(toolbar)
 
         //创建本地数据库（出库临时显示库，本地品名库，本地颜色库）
-        thread { CreatDatabase() }
+        thread { creatNewbase() }
         thread {  initNativeZhusu() }
         thread { initNativeZhusuOther() }
         thread { initNativeChuisu() }
@@ -95,7 +95,7 @@ class MakeManager : BaseActivity() {
     }
 
     //创建本地数据库
-    private fun CreatDatabase(){
+    private fun creatNewbase(){
 
         dbHelper.writableDatabase
 
@@ -103,6 +103,7 @@ class MakeManager : BaseActivity() {
     }
 
     //初始化本地工序库
+    @SuppressLint("Recycle")
     private fun initNativeType(){
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeType",null,null,null,null,null,null)
@@ -111,8 +112,6 @@ class MakeManager : BaseActivity() {
             //如果首次创建数据库，则将远程数据库全部导入
             upNativeType()
             //Log.d("MakeManager","本地数据库更新成功")
-        }else{
-            //Log.d("MakeManager","本地工序库无更新")
         }
 
     }
@@ -208,7 +207,7 @@ class MakeManager : BaseActivity() {
         val db = dbHelper.writableDatabase
         val typeList = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM worktype "
                 try {
@@ -239,7 +238,7 @@ class MakeManager : BaseActivity() {
                     //Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -250,7 +249,7 @@ class MakeManager : BaseActivity() {
         val db = dbHelper.writableDatabase
         val zhusuList = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM zhusuprodunametable "
                 try {
@@ -264,12 +263,12 @@ class MakeManager : BaseActivity() {
                         zhusuList.add(nameZhusu)
                     }
                 } catch (e: SQLException) {
-                   // Log.e("MakeManager", "注塑名称插入失败")
+                    // Log.e("MakeManager", "注塑名称插入失败")
                 }
                 for (name in zhusuList){
                     val values = contentValuesOf("produName" to name)
                     db.insert("nativeZhusu", null, values)
-                   // Log.d("MakeManager","注塑名称插入成功")
+                    // Log.d("MakeManager","注塑名称插入成功")
                     //Log.d("MakeManager", "数据库内名称是：$name")
                 }
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
@@ -281,7 +280,7 @@ class MakeManager : BaseActivity() {
                     //Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -295,7 +294,7 @@ class MakeManager : BaseActivity() {
         val nativeList = ArrayList<String>()
         val nativeList1 = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM zhusuprodunametable "
                 try {
@@ -323,7 +322,7 @@ class MakeManager : BaseActivity() {
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
                 //关闭数据库
                 if (zhusuList1.count() == nativeList.count()){
-                //判断需要更新本地还是远程库
+                    //判断需要更新本地还是远程库
                     nativeList.removeAll(zhusuList1)
                     zhusuList2.removeAll(nativeList1)
                     val count1 = nativeList.count()
@@ -339,8 +338,6 @@ class MakeManager : BaseActivity() {
                             db.insert("nativeZhusu", null, values)
                             //Log.d("MakeManager", "本地注塑库增加已更新")
                         }
-                    }else{
-                        //Log.d("MakeManager", "注塑数据库无更新")
                     }
 
                 }else if (zhusuList1.count() > nativeList.count()){
@@ -354,7 +351,7 @@ class MakeManager : BaseActivity() {
                     nativeList.removeAll(zhusuList1)
                     for (i in nativeList)
                         db.delete("nativeZhusu", "produName == ?", arrayOf(i))
-                   // Log.d("MakeManager", "本地注塑库已更新")
+                    // Log.d("MakeManager", "本地注塑库已更新")
                 }
 
                 try {
@@ -364,7 +361,7 @@ class MakeManager : BaseActivity() {
                     //Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
 
         }catch (e:Exception){
             e.printStackTrace()
@@ -376,7 +373,7 @@ class MakeManager : BaseActivity() {
         val db = dbHelper.writableDatabase
         val zhusuList = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM zhusuothertable "
                 try {
@@ -407,7 +404,7 @@ class MakeManager : BaseActivity() {
                     //Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -421,7 +418,7 @@ class MakeManager : BaseActivity() {
         val nativeList = ArrayList<String>()
         val nativeList1 = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM zhusuothertable "
                 try {
@@ -435,7 +432,7 @@ class MakeManager : BaseActivity() {
                         zhusuList1.add(nameZhusu)
                     }
                 } catch (e: SQLException) {
-                  //  Log.e("MakeManager", "其他注塑名称搜索失败")
+                    //  Log.e("MakeManager", "其他注塑名称搜索失败")
                 }
                 //Log.d("MakeManager", "远程其他注塑库准备完成")
                 if (cursor.moveToFirst()){
@@ -463,10 +460,8 @@ class MakeManager : BaseActivity() {
                         for (n in zhusuList2){
                             val values = contentValuesOf("produName" to n)
                             db.insert("nativeZhusuOther", null, values)
-                           // Log.d("MakeManager", "本地其他注塑库增加已更新")
+                            // Log.d("MakeManager", "本地其他注塑库增加已更新")
                         }
-                    }else{
-                        //Log.d("MakeManager", "注塑数据库无更新")
                     }
 
                 }else if (zhusuList1.count() > nativeList.count()){
@@ -490,7 +485,7 @@ class MakeManager : BaseActivity() {
                     //Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
 
         }catch (e:Exception){
             e.printStackTrace()
@@ -499,9 +494,9 @@ class MakeManager : BaseActivity() {
 //吹塑本地库更新
 private fun upChuisuAllData(){
     val db = dbHelper.writableDatabase
-    val ChuisuList = ArrayList<String>()
+    val chuisuMakeList = ArrayList<String>()
     try {
-        Thread ({
+        Thread {
             val conn = DBUtil().conection()
             val sql = "SELECT * FROM chuisuprodunametable "
             try {
@@ -512,27 +507,27 @@ private fun upChuisuAllData(){
 
                 while (rSet.next()) {
                     val nameChuisu = rSet.getString("name")
-                    ChuisuList.add(nameChuisu)
+                    chuisuMakeList.add(nameChuisu)
                 }
             } catch (e: SQLException) {
-               // Log.e("MakeManager", "吹塑名称插入失败")
+                // Log.e("MakeManager", "吹塑名称插入失败")
             }
-            for (name in ChuisuList){
+            for (name in chuisuMakeList){
                 val values = contentValuesOf("produName" to name)
                 db.insert("nativeChuisu", null, values)
-               // Log.d("MakeManager","吹塑名称插入成功")
+                // Log.d("MakeManager","吹塑名称插入成功")
                 //Log.d("MakeManager", "吹塑数据库内名称是：$name")
             }
             //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
             //关闭数据库
             try {
                 conn!!.close()
-               // Log.d("MakeManager", "关闭连接成功。")
+                // Log.d("MakeManager", "关闭连接成功。")
             } catch (e: SQLException) {
-              //  Log.d("MakeManager", "关闭连接失败。")
+                //  Log.d("MakeManager", "关闭连接失败。")
             }
 
-        }).start()
+        }.start()
     }catch (e:Exception){
         e.printStackTrace()
     }
@@ -546,7 +541,7 @@ private fun upChuisuAllData(){
         val nativeChuisuList = ArrayList<String>()
         val nativeChuisuList1 = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM chuisuprodunametable "
                 try {
@@ -560,9 +555,9 @@ private fun upChuisuAllData(){
                         chuisuList1.add(nameChuisu)
                     }
                 } catch (e: SQLException) {
-                //    Log.e("MakeManager", "吹塑名称搜索失败")
+                    //    Log.e("MakeManager", "吹塑名称搜索失败")
                 }
-               // Log.d("MakeManager", "远程吹塑库准备完成")
+                // Log.d("MakeManager", "远程吹塑库准备完成")
                 if (cursor.moveToFirst()){
                     do {
                         val name1 = cursor.getString(cursor.getColumnIndex("produName"))
@@ -570,28 +565,26 @@ private fun upChuisuAllData(){
                     }while (cursor.moveToNext())
                 }
                 cursor.close()
-              //  Log.d("MakeManager", "本地吹塑库准备完成")
+                //  Log.d("MakeManager", "本地吹塑库准备完成")
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
                 //关闭数据库
                 if (chuisuList1.count() == nativeChuisuList.count()){
                     //判断需要更新本地还是远程库
-                     nativeChuisuList.removeAll(chuisuList1)
+                    nativeChuisuList.removeAll(chuisuList1)
                     chuisuList2.removeAll(nativeChuisuList1)
                     val count1 = nativeChuisuList.count()
                     val count2 = chuisuList2.count()
                     if (count1 > 0){
                         for (m in nativeChuisuList){
                             db.delete("nativeChuisu", "produName == ?", arrayOf(m))
-                //            Log.d("MakeManager", "本地吹塑库删除已更新")
+                            //            Log.d("MakeManager", "本地吹塑库删除已更新")
                         }
                     }else if (count2 > 0){
                         for (n in chuisuList2){
                             val values = contentValuesOf("produName" to n)
                             db.insert("nativeChuisu", null, values)
-                   //         Log.d("MakeManager", "本地吹塑库增加已更新")
+                            //         Log.d("MakeManager", "本地吹塑库增加已更新")
                         }
-                    }else{
-                  //      Log.d("MakeManager", "吹塑数据库无更新")
                     }
 
                 }else if (chuisuList1.count() > nativeChuisuList.count()){
@@ -605,17 +598,17 @@ private fun upChuisuAllData(){
                     nativeChuisuList.removeAll(chuisuList1)
                     for (i in nativeChuisuList)
                         db.delete("nativeChuisu", "produName == ?", arrayOf(i))
-                  //  Log.d("MakeManager", "本地吹塑库已更新")
+                    //  Log.d("MakeManager", "本地吹塑库已更新")
                 }
 
                 try {
                     conn!!.close()
-                 //   Log.d("MakeManager", "关闭数据库连接成功。")
+                    //   Log.d("MakeManager", "关闭数据库连接成功。")
                 } catch (e: SQLException) {
-                 //   Log.d("MakeManager", "关闭连接失败。")
+                    //   Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
 
         }catch (e:Exception){
             e.printStackTrace()
@@ -626,7 +619,7 @@ private fun upChuisuAllData(){
         val db = dbHelper.writableDatabase
         val jichuList = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM jichuprodunametable"
                 try {
@@ -640,12 +633,12 @@ private fun upChuisuAllData(){
                         jichuList.add(nameJichu)
                     }
                 } catch (e: SQLException) {
-                 //   Log.e("MakeManager", "挤出名称获取失败")
+                    //   Log.e("MakeManager", "挤出名称获取失败")
                 }
                 for (name in jichuList){
                     val values = contentValuesOf("produName" to name)
                     db.insert("nativeJichu", null, values)
-                 //   Log.d("MakeManager","挤出名称插入成功")
+                    //   Log.d("MakeManager","挤出名称插入成功")
                     //Log.d("MakeManager", "挤出数据库内名称是：$name")
                 }
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
@@ -657,7 +650,7 @@ private fun upChuisuAllData(){
                     //Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -671,7 +664,7 @@ private fun upChuisuAllData(){
         val nativeJichuList = ArrayList<String>()
         val nativeJichuList1 = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM jichuprodunametable "
                 try {
@@ -685,9 +678,9 @@ private fun upChuisuAllData(){
                         jichuList1.add(nameJichu)
                     }
                 } catch (e: SQLException) {
-                  //  Log.e("MakeManager", "挤出名称搜索失败")
+                    //  Log.e("MakeManager", "挤出名称搜索失败")
                 }
-               // Log.d("MakeManager", "远程挤出库准备完成")
+                // Log.d("MakeManager", "远程挤出库准备完成")
                 if (cursor.moveToFirst()){
                     do {
                         val name1 = cursor.getString(cursor.getColumnIndex("produName"))
@@ -695,7 +688,7 @@ private fun upChuisuAllData(){
                     }while (cursor.moveToNext())
                 }
                 cursor.close()
-              //  Log.d("MakeManager", "本地挤出库准备完成")
+                //  Log.d("MakeManager", "本地挤出库准备完成")
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
                 //关闭数据库
                 if (jichuList1.count() == nativeJichuList.count()){
@@ -707,16 +700,14 @@ private fun upChuisuAllData(){
                     if (count1 > 0){
                         for (m in nativeJichuList){
                             db.delete("nativeJichu", "produName == ?", arrayOf(m))
-                      //      Log.d("MakeManager", "本地挤出库删除已更新")
+                            //      Log.d("MakeManager", "本地挤出库删除已更新")
                         }
                     }else if (count2 > 0){
                         for (n in jichuList2){
                             val values = contentValuesOf("produName" to n)
                             db.insert("nativeJichu", null, values)
-                       //     Log.d("MakeManager", "本地挤出库增加已更新")
+                            //     Log.d("MakeManager", "本地挤出库增加已更新")
                         }
-                    }else{
-                    //    Log.d("MakeManager", "挤出数据库无更新")
                     }
 
                 }else if (jichuList1.count() > nativeJichuList.count()){
@@ -724,23 +715,23 @@ private fun upChuisuAllData(){
                     for (i in jichuList1){
                         val values = contentValuesOf("produName" to i)
                         db.insert("nativeJichu", null, values)
-                       // Log.d("MakeManager", "可更新的数据是：+$i+已更新至本地挤出库")
+                        // Log.d("MakeManager", "可更新的数据是：+$i+已更新至本地挤出库")
                     }
                 }else{
                     nativeJichuList.removeAll(jichuList1)
                     for (i in nativeJichuList)
                         db.delete("nativeJichu", "produName == ?", arrayOf(i))
-                //    Log.d("MakeManager", "本地挤出库已更新")
+                    //    Log.d("MakeManager", "本地挤出库已更新")
                 }
 
                 try {
                     conn!!.close()
-               //     Log.d("MakeManager", "关闭数据库连接成功。")
+                    //     Log.d("MakeManager", "关闭数据库连接成功。")
                 } catch (e: SQLException) {
-               //     Log.d("MakeManager", "关闭连接失败。")
+                    //     Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
 
         }catch (e:Exception){
             e.printStackTrace()
@@ -751,7 +742,7 @@ private fun upChuisuAllData(){
         val db = dbHelper.writableDatabase
         val otherList = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM otherprodunametable "
                 try {
@@ -765,24 +756,24 @@ private fun upChuisuAllData(){
                         otherList.add(nameOther)
                     }
                 } catch (e: SQLException) {
-               //     Log.e("MakeManager", "其他名称插入失败")
+                    //     Log.e("MakeManager", "其他名称插入失败")
                 }
                 for (name in otherList){
                     val values = contentValuesOf("produName" to name)
                     db.insert("nativeOther", null, values)
-                //    Log.d("MakeManager","其他名称插入成功")
+                    //    Log.d("MakeManager","其他名称插入成功")
                     //Log.d("MakeManager", "其他数据库内名称是：$name")
                 }
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
                 //关闭数据库
                 try {
                     conn!!.close()
-             //       Log.d("MakeManager", "关闭连接成功。")
+                    //       Log.d("MakeManager", "关闭连接成功。")
                 } catch (e: SQLException) {
-            //        Log.d("MakeManager", "关闭连接失败。")
+                    //        Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -796,7 +787,7 @@ private fun upChuisuAllData(){
         val nativeOtherList = ArrayList<String>()
         val nativeOtherList1 = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM otherprodunametable "
                 try {
@@ -810,9 +801,9 @@ private fun upChuisuAllData(){
                         otherList1.add(nameJichu)
                     }
                 } catch (e: SQLException) {
-               //     Log.e("MakeManager", "其他名称搜索失败")
+                    //     Log.e("MakeManager", "其他名称搜索失败")
                 }
-               // Log.d("MakeManager", "远程其他库准备完成")
+                // Log.d("MakeManager", "远程其他库准备完成")
                 if (cursor.moveToFirst()){
                     do {
                         val name1 = cursor.getString(cursor.getColumnIndex("produName"))
@@ -820,7 +811,7 @@ private fun upChuisuAllData(){
                     }while (cursor.moveToNext())
                 }
                 cursor.close()
-               // Log.d("MakeManager", "本地其他库准备完成")
+                // Log.d("MakeManager", "本地其他库准备完成")
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
                 //关闭数据库
                 if (otherList1.count() == nativeOtherList.count()){
@@ -832,16 +823,14 @@ private fun upChuisuAllData(){
                     if (count1 > 0){
                         for (m in nativeOtherList){
                             db.delete("nativeOther", "produName == ?", arrayOf(m))
-                //            Log.d("MakeManager", "本地其他库已删除更新")
+                            //            Log.d("MakeManager", "本地其他库已删除更新")
                         }
                     }else if (count2 > 0){
                         for (n in otherList2){
                             val values = contentValuesOf("produName" to n)
                             db.insert("nativeOther", null, values)
-                  //          Log.d("MakeManager", "本地其他库已增加更新")
+                            //          Log.d("MakeManager", "本地其他库已增加更新")
                         }
-                    }else{
-                //        Log.d("MakeManager", "其他数据库无更新")
                     }
 
                 }else if (otherList1.count() > nativeOtherList.count()){
@@ -855,17 +844,17 @@ private fun upChuisuAllData(){
                     nativeOtherList.removeAll(otherList1)
                     for (i in nativeOtherList)
                         db.delete("nativeOther", "produName == ?", arrayOf(i))
-                //    Log.d("MakeManager", "本地其他库已更新")
+                    //    Log.d("MakeManager", "本地其他库已更新")
                 }
 
                 try {
                     conn!!.close()
-                //    Log.d("MakeManager", "关闭数据库连接成功。")
+                    //    Log.d("MakeManager", "关闭数据库连接成功。")
                 } catch (e: SQLException) {
-                //    Log.d("MakeManager", "关闭连接失败。")
+                    //    Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
 
         }catch (e:Exception){
             e.printStackTrace()
@@ -877,7 +866,7 @@ private fun upChuisuAllData(){
         val db = dbHelper.writableDatabase
         val colorList = ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM colornametable "
                 try {
@@ -891,24 +880,24 @@ private fun upChuisuAllData(){
                         colorList.add(nameOther)
                     }
                 } catch (e: SQLException) {
-                //    Log.e("MakeManager", "颜色名称插入失败")
+                    //    Log.e("MakeManager", "颜色名称插入失败")
                 }
                 for (name in colorList){
                     val values = contentValuesOf("produColor" to name)
                     db.insert("nativeProduColor", null, values)
-                 //   Log.d("MakeManager","颜色名称插入成功")
+                    //   Log.d("MakeManager","颜色名称插入成功")
                     //Log.d("MakeManager", "颜色库内名称是：$name")
                 }
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
                 //关闭数据库
                 try {
                     conn!!.close()
-                 //   Log.d("MakeManager", "关闭连接成功。")
+                    //   Log.d("MakeManager", "关闭连接成功。")
                 } catch (e: SQLException) {
-                //    Log.d("MakeManager", "关闭连接失败。")
+                    //    Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -922,7 +911,7 @@ private fun upChuisuAllData(){
         val nativeColorList = ArrayList<String>()
         val nativeColorList1 =ArrayList<String>()
         try {
-            Thread ({
+            Thread {
                 val conn = DBUtil().conection()
                 val sql = "SELECT * FROM colornametable "
                 try {
@@ -937,9 +926,9 @@ private fun upChuisuAllData(){
                         colorList2.add(nameColor)
                     }
                 } catch (e: SQLException) {
-                  //  Log.e("MakeManager", "颜色名称搜索失败")
+                    //  Log.e("MakeManager", "颜色名称搜索失败")
                 }
-              //  Log.d("MakeManager", "远程颜色库准备完成")
+                //  Log.d("MakeManager", "远程颜色库准备完成")
                 if (cursor.moveToFirst()){
                     do {
                         val name1 = cursor.getString(cursor.getColumnIndex("produColor"))
@@ -948,11 +937,11 @@ private fun upChuisuAllData(){
                     }while (cursor.moveToNext())
                 }
                 cursor.close()
-              //  Log.d("MakeManager", "本地颜色库准备完成")
+                //  Log.d("MakeManager", "本地颜色库准备完成")
                 //Log.d("MakeManager", rSet.getString("id").toString() + "\t" + rSet.getString("name") + "\t")
                 //关闭数据库
                 if (colorList1.count() == nativeColorList.count()){
-                     nativeColorList.removeAll(colorList1)
+                    nativeColorList.removeAll(colorList1)
                     colorList2.removeAll(nativeColorList1)
                     val count1 = nativeColorList.count()
                     val count2 = colorList2.count()
@@ -960,14 +949,12 @@ private fun upChuisuAllData(){
                         for (m in nativeColorList){
                             db.delete("nativeProduColor", "produColor == ?", arrayOf(m))
                         }
-                //        Log.d("MakeManager", "颜色数据库更新完成")
+                        //        Log.d("MakeManager", "颜色数据库更新完成")
                     }else if (count2 > 0){
                         for (n in colorList2){
                             val values = contentValuesOf("produColor" to n)
                             db.insert("nativeProduColor", null, values)
                         }
-                    }else{
-                 //       Log.d("MakeManager", "颜色数据库无更新")
                     }
 
                 }else if (colorList1.count() > nativeColorList.count()){
@@ -981,17 +968,17 @@ private fun upChuisuAllData(){
                     nativeColorList.removeAll(colorList1)
                     for (i in nativeColorList)
                         db.delete("nativeProduColor", "produColor == ?", arrayOf(i))
-                //    Log.d("MakeManager", "本地颜色库已更新")
+                    //    Log.d("MakeManager", "本地颜色库已更新")
                 }
 
                 try {
                     conn!!.close()
-             //       Log.d("MakeManager", "关闭数据库连接成功。")
+                    //       Log.d("MakeManager", "关闭数据库连接成功。")
                 } catch (e: SQLException) {
-             //       Log.d("MakeManager", "关闭连接失败。")
+                    //       Log.d("MakeManager", "关闭连接失败。")
                 }
 
-            }).start()
+            }.start()
 
         }catch (e:Exception){
             e.printStackTrace()

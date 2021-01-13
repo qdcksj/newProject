@@ -67,22 +67,27 @@ class OutBound : BaseActivity(){
             selector("选择工序名称", typeList){i ->
                 produTypeName.text = typeList[i]
 
-                val lineName = produTypeName.text
-                if (lineName == "瓶坯注塑"){
-                    initZhusuName()
-                    pingPiName2.text = "非吹塑"
-                }else if (lineName == "非瓶坯注塑"){
-                    initOtherZhusuName()
-                    pingPiName2.text = "非吹塑"
-                }else if (lineName == "吹塑"){
-                    initChuisuName()
-                    initPingpiName()
-                }else if (lineName == "挤出"){
-                    initJichuName()
-                    pingPiName2.text = "非吹塑"
-                }else if (lineName == "其他"){
-                    initOtherName()
-                    pingPiName2.text = "非吹塑"
+                when (produTypeName.text) {
+                    "瓶坯注塑" -> {
+                        initZhusuName()
+                        pingPiName2.text = "非吹塑"
+                    }
+                    "非瓶坯注塑" -> {
+                        initOtherZhusuName()
+                        pingPiName2.text = "非吹塑"
+                    }
+                    "吹塑" -> {
+                        initChuisuName()
+                        initPingpiName()
+                    }
+                    "挤出" -> {
+                        initJichuName()
+                        pingPiName2.text = "非吹塑"
+                    }
+                    "其他" -> {
+                        initOtherName()
+                        pingPiName2.text = "非吹塑"
+                    }
                 }
 
             }
@@ -105,161 +110,167 @@ class OutBound : BaseActivity(){
                 val color = cursor.getString(cursor.getColumnIndex("produColor"))
                 val amount = cursor.getInt(cursor.getColumnIndex("outAmount"))
                 val menu = cursor.getString(cursor.getColumnIndex("produMenu"))
-                if (type == "瓶坯注塑"){
-                    try {
-                        Thread ({
-                            val conn = DBUtil().conection()
-                            val sql = "insert into zhusuouttable values (null, '$name', '$color', '$amount', '$date', '$menu','$user2') "
-                            try {
-                                // 创建用来执行sql语句的对象
-                                val statement: Statement = conn!!.createStatement()
-                                // 执行sql查询语句并获取查询信息
-                                val num = statement.executeUpdate(sql)
-                                if (num > 0){
-                                    Log.d("OutBound","已添加到远程瓶坯注塑出库")
-                                }else{
-                                    Log.d("OutBound","未添加到远程瓶坯注塑出库")
+                when (type) {
+                    "瓶坯注塑" -> {
+                        try {
+                            Thread {
+                                val conn = DBUtil().conection()
+                                val sql = "insert into zhusuouttable values (null, '$name', '$color', '$amount', '$date', '$menu','$user2') "
+                                try {
+                                    // 创建用来执行sql语句的对象
+                                    val statement: Statement = conn!!.createStatement()
+                                    // 执行sql查询语句并获取查询信息
+                                    val num = statement.executeUpdate(sql)
+                                    if (num > 0){
+                                        Log.d("OutBound","已添加到远程瓶坯注塑出库")
+                                    }else{
+                                        Log.d("OutBound","未添加到远程瓶坯注塑出库")
+                                    }
+                                } catch (e: SQLException) {
+                                    Log.e("OutBound", "远程出库瓶坯注塑名称插入失败")
                                 }
-                            } catch (e: SQLException) {
-                                Log.e("OutBound", "远程出库瓶坯注塑名称插入失败")
-                            }
 
-                            //关闭数据库
-                            try {
-                                conn!!.close()
-                                Log.d("OutBound", "关闭连接成功。")
-                            } catch (e: SQLException) {
-                                Log.d("OutBound", "关闭连接失败。")
-                            }
+                                //关闭数据库
+                                try {
+                                    conn!!.close()
+                                    Log.d("OutBound", "关闭连接成功。")
+                                } catch (e: SQLException) {
+                                    Log.d("OutBound", "关闭连接失败。")
+                                }
 
-                        }).start()
-                    }catch (e:Exception){
-                        e.printStackTrace()
+                            }.start()
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                        }
+
                     }
-
-                }else if (type == "非瓶坯注塑"){
-                    try {
-                        Thread ({
-                            val conn = DBUtil().conection()
-                            val sql = "insert into zhusuotherouttable values (null, '$name', '$color', '$amount', '$date', '$menu','$user2') "
-                            try {
-                                // 创建用来执行sql语句的对象
-                                val statement: Statement = conn!!.createStatement()
-                                // 执行sql查询语句并获取查询信息
-                                val num = statement.executeUpdate(sql)
-                                if (num > 0){
-                                    Log.d("OutBound","已添加到远程瓶坯注塑出库")
-                                }else{
-                                    Log.d("OutBound","未添加到远程瓶坯注塑出库")
+                    "非瓶坯注塑" -> {
+                        try {
+                            Thread {
+                                val conn = DBUtil().conection()
+                                val sql = "insert into zhusuotherouttable values (null, '$name', '$color', '$amount', '$date', '$menu','$user2') "
+                                try {
+                                    // 创建用来执行sql语句的对象
+                                    val statement: Statement = conn!!.createStatement()
+                                    // 执行sql查询语句并获取查询信息
+                                    val num = statement.executeUpdate(sql)
+                                    if (num > 0){
+                                        Log.d("OutBound","已添加到远程瓶坯注塑出库")
+                                    }else{
+                                        Log.d("OutBound","未添加到远程瓶坯注塑出库")
+                                    }
+                                } catch (e: SQLException) {
+                                    Log.e("OutBound", "远程出库瓶坯注塑插入失败")
                                 }
-                            } catch (e: SQLException) {
-                                Log.e("OutBound", "远程出库瓶坯注塑插入失败")
-                            }
 
-                            //关闭数据库
-                            try {
-                                conn!!.close()
-                                Log.d("OutBound", "关闭连接成功。")
-                            } catch (e: SQLException) {
-                                Log.d("OutBound", "关闭连接失败。")
-                            }
+                                //关闭数据库
+                                try {
+                                    conn!!.close()
+                                    Log.d("OutBound", "关闭连接成功。")
+                                } catch (e: SQLException) {
+                                    Log.d("OutBound", "关闭连接失败。")
+                                }
 
-                        }).start()
-                    }catch (e:Exception){
-                        e.printStackTrace()
+                            }.start()
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                        }
                     }
-                }else if (type == "吹塑"){
-                    try {
-                        Thread ({
-                            val conn = DBUtil().conection()
-                            val sql = "insert into chuisuouttable values (null, '$name','$pingpi', '$color', '$amount', '$date', '$menu','$user2') "
-                            try {
-                                // 创建用来执行sql语句的对象
-                                val statement: Statement = conn!!.createStatement()
-                                // 执行sql查询语句并获取查询信息
-                                val num = statement.executeUpdate(sql)
-                                if (num > 0){
-                                    Log.d("OutBound","已添加到远程瓶坯吹塑出库")
-                                }else{
-                                    Log.d("OutBound","未添加到远程瓶坯吹塑出库")
+                    "吹塑" -> {
+                        try {
+                            Thread {
+                                val conn = DBUtil().conection()
+                                val sql = "insert into chuisuouttable values (null, '$name','$pingpi', '$color', '$amount', '$date', '$menu','$user2') "
+                                try {
+                                    // 创建用来执行sql语句的对象
+                                    val statement: Statement = conn!!.createStatement()
+                                    // 执行sql查询语句并获取查询信息
+                                    val num = statement.executeUpdate(sql)
+                                    if (num > 0){
+                                        Log.d("OutBound","已添加到远程瓶坯吹塑出库")
+                                    }else{
+                                        Log.d("OutBound","未添加到远程瓶坯吹塑出库")
+                                    }
+                                } catch (e: SQLException) {
+                                    Log.e("OutBound", "远程出库吹塑插入失败")
                                 }
-                            } catch (e: SQLException) {
-                                Log.e("OutBound", "远程出库吹塑插入失败")
-                            }
 
-                            //关闭数据库
-                            try {
-                                conn!!.close()
-                                Log.d("OutBound", "关闭连接成功。")
-                            } catch (e: SQLException) {
-                                Log.d("OutBound", "关闭连接失败。")
-                            }
+                                //关闭数据库
+                                try {
+                                    conn!!.close()
+                                    Log.d("OutBound", "关闭连接成功。")
+                                } catch (e: SQLException) {
+                                    Log.d("OutBound", "关闭连接失败。")
+                                }
 
-                        }).start()
-                    }catch (e:Exception){
-                        e.printStackTrace()
+                            }.start()
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                        }
                     }
-                }else if (type == "挤出"){
-                    try {
-                        Thread ({
-                            val conn = DBUtil().conection()
-                            val sql = "insert into jichuouttable values (null,'$name', '$color', '$amount', '$date', '$menu','$user2') "
-                            try {
-                                // 创建用来执行sql语句的对象
-                                val statement: Statement = conn!!.createStatement()
-                                // 执行sql查询语句并获取查询信息
-                                val num = statement.executeUpdate(sql)
-                                if (num > 0){
-                                    Log.d("OutBound","已添加到远程挤出出库")
-                                }else{
-                                    Log.d("OutBound","未添加到远程挤出出库")
+                    "挤出" -> {
+                        try {
+                            Thread {
+                                val conn = DBUtil().conection()
+                                val sql = "insert into jichuouttable values (null,'$name', '$color', '$amount', '$date', '$menu','$user2') "
+                                try {
+                                    // 创建用来执行sql语句的对象
+                                    val statement: Statement = conn!!.createStatement()
+                                    // 执行sql查询语句并获取查询信息
+                                    val num = statement.executeUpdate(sql)
+                                    if (num > 0){
+                                        Log.d("OutBound","已添加到远程挤出出库")
+                                    }else{
+                                        Log.d("OutBound","未添加到远程挤出出库")
+                                    }
+                                } catch (e: SQLException) {
+                                    Log.e("OutBound", "远程出库挤出插入失败")
                                 }
-                            } catch (e: SQLException) {
-                                Log.e("OutBound", "远程出库挤出插入失败")
-                            }
 
-                            //关闭数据库
-                            try {
-                                conn!!.close()
-                                Log.d("OutBound", "关闭连接成功。")
-                            } catch (e: SQLException) {
-                                Log.d("OutBound", "关闭连接失败。")
-                            }
+                                //关闭数据库
+                                try {
+                                    conn!!.close()
+                                    Log.d("OutBound", "关闭连接成功。")
+                                } catch (e: SQLException) {
+                                    Log.d("OutBound", "关闭连接失败。")
+                                }
 
-                        }).start()
-                    }catch (e:Exception){
-                        e.printStackTrace()
+                            }.start()
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                        }
                     }
-                }else if (type == "其他"){
-                    try {
-                        Thread ({
-                            val conn = DBUtil().conection()
-                            val sql = "insert into otherouttable values (null,'$name','$color', '$amount', '$date', '$menu','$user2') "
-                            try {
-                                // 创建用来执行sql语句的对象
-                                val statement: Statement = conn!!.createStatement()
-                                // 执行sql查询语句并获取查询信息
-                                val num = statement.executeUpdate(sql)
-                                if (num > 0){
-                                    Log.d("OutBound","已添加到远程其他出库")
-                                }else{
-                                    Log.d("OutBound","未添加到远程其他出库")
+                    "其他" -> {
+                        try {
+                            Thread {
+                                val conn = DBUtil().conection()
+                                val sql = "insert into otherouttable values (null,'$name','$color', '$amount', '$date', '$menu','$user2') "
+                                try {
+                                    // 创建用来执行sql语句的对象
+                                    val statement: Statement = conn!!.createStatement()
+                                    // 执行sql查询语句并获取查询信息
+                                    val num = statement.executeUpdate(sql)
+                                    if (num > 0){
+                                        Log.d("OutBound","已添加到远程其他出库")
+                                    }else{
+                                        Log.d("OutBound","未添加到远程其他出库")
+                                    }
+                                } catch (e: SQLException) {
+                                    Log.e("OutBound", "远程出库其他插入失败")
                                 }
-                            } catch (e: SQLException) {
-                                Log.e("OutBound", "远程出库其他插入失败")
-                            }
 
-                            //关闭数据库
-                            try {
-                                conn!!.close()
-                                Log.d("OutBound", "关闭连接成功。")
-                            } catch (e: SQLException) {
-                                Log.d("OutBound", "关闭连接失败。")
-                            }
+                                //关闭数据库
+                                try {
+                                    conn!!.close()
+                                    Log.d("OutBound", "关闭连接成功。")
+                                } catch (e: SQLException) {
+                                    Log.d("OutBound", "关闭连接失败。")
+                                }
 
-                        }).start()
-                    }catch (e:Exception){
-                        e.printStackTrace()
+                            }.start()
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                        }
                     }
                 }
             }while (cursor.moveToNext())
@@ -275,7 +286,7 @@ class OutBound : BaseActivity(){
     private fun initAddTemp(){
         val line = produTypeName.text
         val produName = produName1.text
-        var pingpiNM = pingPiName2.text
+        val pingpiNM = pingPiName2.text
         val colorNM = colorName.text
         val outPro = outAmount.text
         val menuPro = editMenu.text
@@ -315,7 +326,7 @@ class OutBound : BaseActivity(){
                 val color = cursor.getString(cursor.getColumnIndex("produColor"))
                 val amount = cursor.getInt(cursor.getColumnIndex("outAmount")).toString()
                 val menu = cursor.getString(cursor.getColumnIndex("produMenu"))
-                outProduList.add(OutProdu("$type", "$name", "$color", "$amount", "$menu"))
+                outProduList.add(OutProdu(type, name, color, amount, menu))
 
             }while (cursor.moveToNext())
         }
@@ -467,13 +478,13 @@ class OutBound : BaseActivity(){
             }while (cursor1.moveToNext())
         }
         cursor1.close()
-        val nativeUser = userList[0]
 
-        return nativeUser
+        return userList[0]
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun Date.getNowDate(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val sdf = SimpleDateFormat("yyyy-M-d")
         return sdf.format(this)
     }
 }

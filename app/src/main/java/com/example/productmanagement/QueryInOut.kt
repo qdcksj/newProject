@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.in_bound_layout.*
 import kotlinx.android.synthetic.main.query_in_out_layout.*
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
 import org.jetbrains.anko.selector
@@ -43,18 +42,23 @@ class QueryInOut : BaseActivity() {
 
     //依据工序选择出入库统计程序，并计算库存
     private fun titleAll(){
-        val queryInOutType = outInTypeName.text
-        if (queryInOutType == "瓶坯注塑"){
+        when (outInTypeName.text) {
+            "瓶坯注塑" -> {
                 zhusuInOut()
-        }else if (queryInOutType == "非瓶坯注塑"){
-            otherZhusuInOut()
+            }
+            "非瓶坯注塑" -> {
+                otherZhusuInOut()
 
-        }else if (queryInOutType == "吹塑"){
-            chuisuInOut()
-        }else if (queryInOutType == "挤出"){
-            jichuInOut()
-        }else if (queryInOutType == "其他"){
-            otherInOut()
+            }
+            "吹塑" -> {
+                chuisuInOut()
+            }
+            "挤出" -> {
+                jichuInOut()
+            }
+            "其他" -> {
+                otherInOut()
+            }
         }
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -93,7 +97,7 @@ class QueryInOut : BaseActivity() {
                         queryInList1.add(tile1)
                         var sum1 = 0
                         for (a in queryInList1){
-                            sum1 = sum1 + a
+                            sum1 += a
                             queryInTitle.text = sum1.toString()
                            // println("入库总数为："+sum1)
                         }
@@ -125,9 +129,9 @@ class QueryInOut : BaseActivity() {
                         queryOutList2.add(title2)
                         var sum2 = 0
                         for (b in queryOutList2){
-                            sum2 = sum2 + b
+                            sum2 += b
                             queryOutTitle.text = sum2.toString()
-                            println("出库总数为："+sum2)
+                            //println("出库总数为："+sum2)
                         }
                         Log.d("QueryInout","注塑数据加入集合2成功")
                     }
@@ -167,7 +171,7 @@ class QueryInOut : BaseActivity() {
                         queryInList.add(tile1)
                         var sum1 = 0
                         for (a in queryInList){
-                            sum1 = sum1 + a
+                            sum1 += a
                         }
                         queryInTitle.text = sum1.toString()
                     }
@@ -194,7 +198,7 @@ class QueryInOut : BaseActivity() {
                         queryOutList.add(title2)
                         var sum2 = 0
                         for (b in queryOutList){
-                            sum2 = sum2 + b
+                            sum2 += b
                         }
                         queryOutTitle.text = sum2.toString()
                     }
@@ -233,7 +237,7 @@ class QueryInOut : BaseActivity() {
                         queryInList.add(tile1)
                         var sum1 = 0
                         for (a in queryInList){
-                            sum1 = sum1 + a
+                            sum1 += a
                         }
                         queryInTitle.text = sum1.toString()
                     }
@@ -260,7 +264,7 @@ class QueryInOut : BaseActivity() {
                         queryOutList.add(title2)
                         var sum2 = 0
                         for (b in queryOutList){
-                            sum2 = sum2 + b
+                            sum2 += b
                         }
                         queryOutTitle.text = sum2.toString()
                     }
@@ -299,7 +303,7 @@ class QueryInOut : BaseActivity() {
                         queryInList.add(tile1)
                         var sum1 = 0
                         for (a in queryInList){
-                            sum1 = sum1 + a
+                            sum1 += a
                         }
                         queryInTitle.text = sum1.toString()
                     }
@@ -326,7 +330,7 @@ class QueryInOut : BaseActivity() {
                         queryOutList.add(title2)
                         var sum2 = 0
                         for (b in queryOutList){
-                            sum2 = sum2 + b
+                            sum2 += b
                         }
                         queryOutTitle.text = sum2.toString()
                     }
@@ -365,7 +369,7 @@ class QueryInOut : BaseActivity() {
                         queryInList.add(tile1)
                         var sum1 = 0
                         for (a in queryInList){
-                            sum1 = sum1 + a
+                            sum1 += a
                         }
                         queryInTitle.text = sum1.toString()
                     }
@@ -392,7 +396,7 @@ class QueryInOut : BaseActivity() {
                         queryOutList.add(title2)
                         var sum2 = 0
                         for (b in queryOutList){
-                            sum2 = sum2 + b
+                            sum2 += b
                         }
                         queryOutTitle.text = sum2.toString()
                     }
@@ -408,23 +412,6 @@ class QueryInOut : BaseActivity() {
             }
         }catch (e:Exception){
             e.printStackTrace()
-        }
-    }
-
-    //初始化各Spinner
-
-    private fun initNameSpinner(){
-        val queryInOutType = outInTypeName.text
-        if (queryInOutType == "瓶坯注塑"){
-            initZhusuSpinner()
-        }else if (queryInOutType == "非瓶坯注塑"){
-            initOtherZhusuSpinner()
-        }else if (queryInOutType == "吹塑"){
-            initChuisuSpinner()
-        }else if (queryInOutType == "挤出"){
-            initJichuSpinner()
-        }else if (queryInOutType == "其他"){
-            initOtherSpinner()
         }
     }
 
@@ -444,17 +431,22 @@ class QueryInOut : BaseActivity() {
         outInTypeName.setOnClickListener {
             selector("选择工序名称", typeList){i ->
                 outInTypeName.text = typeList[i]
-                val queryInOutType = outInTypeName.text
-                if (queryInOutType == "瓶坯注塑"){
-                    initZhusuSpinner()
-                }else if (queryInOutType == "非瓶坯注塑"){
-                    initOtherZhusuSpinner()
-                }else if (queryInOutType == "吹塑"){
-                    initChuisuSpinner()
-                }else if (queryInOutType == "挤出"){
-                    initJichuSpinner()
-                }else if (queryInOutType == "其他"){
-                    initOtherSpinner()
+                when (outInTypeName.text) {
+                    "瓶坯注塑" -> {
+                        initZhusuSpinner()
+                    }
+                    "非瓶坯注塑" -> {
+                        initOtherZhusuSpinner()
+                    }
+                    "吹塑" -> {
+                        initChuisuSpinner()
+                    }
+                    "挤出" -> {
+                        initJichuSpinner()
+                    }
+                    "其他" -> {
+                        initOtherSpinner()
+                    }
                 }
             }
         }

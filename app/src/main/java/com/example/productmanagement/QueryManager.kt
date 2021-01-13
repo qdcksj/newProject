@@ -1,12 +1,10 @@
 package com.example.productmanagement
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.query_manager_layout.*
-import kotlinx.android.synthetic.main.super_manager_layout.*
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
 
 class QueryManager : BaseActivity() {

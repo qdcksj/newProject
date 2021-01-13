@@ -18,8 +18,6 @@ import kotlin.concurrent.thread
 @Suppress("DEPRECATION")
 class InBound : BaseActivity() {
     val dbHelper = ProduDatabaseHelper(this, "nativeBases", 1)
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.in_bound_layout)
@@ -45,7 +43,7 @@ class InBound : BaseActivity() {
     //初始化工序名称
     @SuppressLint("ResourceType", "SimpleDateFormat")
     fun initTypeName(){
-        var typeList = ArrayList<String>()
+        val typeList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeType",null,null,null,null,null,null)
         if (cursor.moveToFirst()){
@@ -59,43 +57,53 @@ class InBound : BaseActivity() {
         lineSpiner.setOnClickListener {
             selector("选择工序名称", typeList){i ->
                 lineSpiner.text = typeList[i]
-                val lineType = lineSpiner.text
 
-                if (lineType == "吹塑"){
-                    initChuisuName()
-                    initPingpiName()
-                }else if (lineType == "瓶坯注塑"){
-                    initZhusuName()
-                    pingPiName1.text = "不使用瓶坯"
-                }else if (lineType == "非瓶坯注塑"){
-                    initOtherZhusuName()
-                    pingPiName1.text = "不使用瓶坯"
-                }else if (lineType == "挤出"){
-                    pingPiName1.text = "不使用瓶坯"
-                    initJichuName()
-                }else if (lineType == "其他"){
-                    initOtherName()
+                when (lineSpiner.text) {
+                    "吹塑" -> {
+                        initChuisuName()
+                        initPingpiName()
+                    }
+                    "瓶坯注塑" -> {
+                        initZhusuName()
+                        pingPiName1.text = "不使用瓶坯"
+                    }
+                    "非瓶坯注塑" -> {
+                        initOtherZhusuName()
+                        pingPiName1.text = "不使用瓶坯"
+                    }
+                    "挤出" -> {
+                        pingPiName1.text = "不使用瓶坯"
+                        initJichuName()
+                    }
+                    "其他" -> {
+                        initOtherName()
+                    }
                 }
 
                 dataSave.setOnClickListener {
-                    val lineType1 = lineSpiner.text
 
-                    if (lineType1 == "吹塑"){
-                        chusuInBound()
-                        chusuAndPingpiOut()
-                        "吹塑产品保存成功".showToast()
-                    }else if (lineType1 == "瓶坯注塑"){
-                        zhusuInBound()
-                        "注塑瓶坯保存成功".showToast()
-                    }else if (lineType1 == "非瓶坯注塑"){
-                        zhusuOtherInBound()
-                        "其他注塑产品保存成功".showToast()
-                    }else if (lineType1 == "挤出"){
-                        jichuInBound()
-                        "挤出产品保存成功".showToast()
-                    }else if (lineType1 == "其他"){
-                        otherInBound()
-                        "其他产品保存成功".showToast()
+                    when (lineSpiner.text) {
+                        "吹塑" -> {
+                            chusuInBound()
+                            chusuAndPingpiOut()
+                            "吹塑产品保存成功".showToast()
+                        }
+                        "瓶坯注塑" -> {
+                            zhusuInBound()
+                            "注塑瓶坯保存成功".showToast()
+                        }
+                        "非瓶坯注塑" -> {
+                            zhusuOtherInBound()
+                            "其他注塑产品保存成功".showToast()
+                        }
+                        "挤出" -> {
+                            jichuInBound()
+                            "挤出产品保存成功".showToast()
+                        }
+                        "其他" -> {
+                            otherInBound()
+                            "其他产品保存成功".showToast()
+                        }
                     }
                 }
             }
@@ -127,9 +135,9 @@ class InBound : BaseActivity() {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (weight.length > 0){
-                    if (amount.length >0){
-                        if (menu.length > 0){
+                if (weight.isNotEmpty()){
+                    if (amount.isNotEmpty()){
+                        if (menu.isNotEmpty()){
                             try {
                                 val sql = "insert into zhusuintable values(null, '$produName','$weight', '$colorName', '$amount', '$date1', '$menu', '$user1') "
                                 // 创建用来执行sql语句的对象
@@ -194,9 +202,9 @@ class InBound : BaseActivity() {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (weight.length > 0){
-                    if (amount.length >0){
-                        if (menu.length > 0){
+                if (weight.isNotEmpty()){
+                    if (amount.isNotEmpty()){
+                        if (menu.isNotEmpty()){
                             try {
                                 val sql = "insert into zhusuotherintable values(null, '$produName','$weight', '$colorName', '$amount', '$date1', '$menu', '$user1') "
                                 // 创建用来执行sql语句的对象
@@ -251,7 +259,7 @@ class InBound : BaseActivity() {
 
     //吹塑产品入库
     private fun chusuInBound(){
-        var pingpiName = pingPiName1.text
+        val pingpiName = pingPiName1.text
         val produName = spiner11.text
         val colorName = spiner2.text
         val amount = editProduAmount.text
@@ -261,8 +269,8 @@ class InBound : BaseActivity() {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (amount.length > 0){
-                    if (menu.length >0){
+                if (amount.isNotEmpty()){
+                    if (menu.isNotEmpty()){
                             try {
                                 val sql = "insert into zhusuintable values(null, '$produName','$pingpiName', '$colorName', '$amount', '$date1', '$menu', '$user1') "
                                 // 创建用来执行sql语句的对象
@@ -312,7 +320,7 @@ class InBound : BaseActivity() {
     }
     //吹塑相关的瓶坯出库记录操作
     private fun chusuAndPingpiOut(){
-        var pingpiName = pingPiName1.text
+        val pingpiName = pingPiName1.text
         val colorName = spiner2.text
         val amount = editProduAmount.text
         val date1 = Date().getNowDate()
@@ -321,8 +329,8 @@ class InBound : BaseActivity() {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (amount.length > 0){
-                    if (menu.length >0){
+                if (amount.isNotEmpty()){
+                    if (menu.isNotEmpty()){
 
                             try {
                                 val sql = "insert into zhusuouttable values(null, '$pingpiName', '$colorName', '$amount', '$date1', '$menu', '$user1') "
@@ -374,7 +382,7 @@ class InBound : BaseActivity() {
         }
     }
     //挤出产品入库
-    fun jichuInBound(){
+    private fun jichuInBound(){
 
         val produName = spiner11.text
         val weight = produWeightBt.text
@@ -386,9 +394,9 @@ class InBound : BaseActivity() {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (weight.length > 0){
-                    if (amount.length >0){
-                        if (menu.length > 0){
+                if (weight.isNotEmpty()){
+                    if (amount.isNotEmpty()){
+                        if (menu.isNotEmpty()){
                             try {
                                 val sql = "insert into jichuintable values(null, '$produName','$weight', '$colorName', '$amount', '$date1', '$menu', '$user1') "
                                 // 创建用来执行sql语句的对象
@@ -441,7 +449,7 @@ class InBound : BaseActivity() {
 
     }
     //其他产品入库
-    fun otherInBound(){
+    private fun otherInBound(){
         val produName = spiner11.text
         val weight = produWeightBt.text
         val colorName = spiner2.text
@@ -452,9 +460,9 @@ class InBound : BaseActivity() {
         try {
             thread {
                 val conn = DBUtil().conection()
-                if (weight.length > 0){
-                    if (amount.length >0){
-                        if (menu.length > 0){
+                if (weight.isNotEmpty()){
+                    if (amount.isNotEmpty()){
+                        if (menu.isNotEmpty()){
                             try {
                                 val sql = "insert into zhusuintable values(null, '$produName','$weight', '$colorName', '$amount', '$date1', '$menu', '$user1') "
                                 // 创建用来执行sql语句的对象
@@ -506,7 +514,7 @@ class InBound : BaseActivity() {
         }
     }
     //刷新当前页面
-    fun freshInBound(){
+    private fun freshInBound(){
         initColorName()
         initTypeName()
 
@@ -514,8 +522,8 @@ class InBound : BaseActivity() {
 
 
     //初始化瓶坯产品名
-    fun initZhusuName(){
-        var typeList = ArrayList<String>()
+    private fun initZhusuName(){
+        val typeList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeZhusu",null,null,null,null,null,null)
         if (cursor.moveToFirst()){
@@ -532,8 +540,8 @@ class InBound : BaseActivity() {
             }
         }
     }
-    fun initChuisuName(){
-        var typeList = ArrayList<String>()
+    private fun initChuisuName(){
+        val typeList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeChuisu",null,null,null,null,null,null)
         if (cursor.moveToFirst()){
@@ -550,8 +558,8 @@ class InBound : BaseActivity() {
             }
         }
     }
-    fun initJichuName(){
-        var typeList = ArrayList<String>()
+    private fun initJichuName(){
+        val typeList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeJichu",null,null,null,null,null,null)
         if (cursor.moveToFirst()){
@@ -568,8 +576,8 @@ class InBound : BaseActivity() {
             }
         }
     }
-    fun initOtherName(){
-        var typeList = ArrayList<String>()
+    private fun initOtherName(){
+        val typeList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeOther",null,null,null,null,null,null)
         if (cursor.moveToFirst()){
@@ -588,8 +596,8 @@ class InBound : BaseActivity() {
     }
 
     //初始化颜色名
-    fun initColorName(){
-        var typeList = ArrayList<String>()
+    private fun initColorName(){
+        val typeList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeProduColor",null,null,null,null,null,null)
         if (cursor.moveToFirst()){
@@ -607,8 +615,8 @@ class InBound : BaseActivity() {
         }
     }
     //初始化非瓶坯注塑产品名
-    fun initOtherZhusuName(){
-        var typeList = ArrayList<String>()
+    private fun initOtherZhusuName(){
+        val typeList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeZhusuOther",null,null,null,null,null,null)
         if (cursor.moveToFirst()){
@@ -626,8 +634,8 @@ class InBound : BaseActivity() {
         }
     }
     //初始化吹塑用瓶坯选择
-    fun initPingpiName(){
-        var typeList = ArrayList<String>()
+    private fun initPingpiName(){
+        val typeList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor = db.query("nativeZhusu",null,null,null,null,null,null)
         if (cursor.moveToFirst()){
@@ -645,8 +653,8 @@ class InBound : BaseActivity() {
         }
     }
     //获取操作者名称
-    fun getUser(): String? {
-        var userList = ArrayList<String>()
+    private fun getUser(): String? {
+        val userList = ArrayList<String>()
         val db = dbHelper.writableDatabase
         val cursor1 = db.query("nativeUser", null,null,null,null,null,null)
         if (cursor1.moveToFirst()){
@@ -656,13 +664,13 @@ class InBound : BaseActivity() {
             }while (cursor1.moveToNext())
         }
         cursor1.close()
-        val nativeUser = userList[0]
 
-        return nativeUser
+        return userList[0]
     }
     //获取日期
+    @SuppressLint("SimpleDateFormat")
     fun Date.getNowDate(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val sdf = SimpleDateFormat("yyyy-M-d")
         return sdf.format(this)
     }
 }

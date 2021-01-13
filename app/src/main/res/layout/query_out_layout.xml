@@ -63,7 +63,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="12dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="12dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,47 +122,56 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
 
-        <Button
-            android:id="@+id/selectStartDateOut"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="点击选择开始日期"/>
+            android:text="选择开始日期："/>
 
         <TextView
             android:id="@+id/startDateOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="buttonFunc3"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="45dp"
             android:background="#7AFEC6"
+            android:hint="点击选择开始日期"
             android:textSize="20sp"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
 
-        <Button
-            android:id="@+id/selectLastDateOut"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="点击选择结束日期"/>
+            android:text="选择截止日期："/>
 
         <TextView
             android:id="@+id/lastDateOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="buttonFunc4"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="45dp"
             android:background="#7AFEC6"
+            android:hint="点击选择开始日期"
             android:textSize="20sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#CA8EFF">
+
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView

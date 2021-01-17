@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#bfefff"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,21 +16,34 @@
         app:titleTextAppearance="@style/Toolbar.TitleText"/>
 
     <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="出库操作"
+            android:textSize="25sp" />
+    </LinearLayout>
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
 
         <TextView
+            android:layout_marginStart="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="选择类别："
             android:textSize="20sp"/>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#7AFEC6">
+            android:layout_marginEnd="35dp"
+            android:layout_weight="1">
             <Spinner
                 android:id="@+id/produTypeSp"
                 android:layout_width="wrap_content"
@@ -39,58 +53,90 @@
                 android:id="@+id/produTypeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"/>
+                android:background="@drawable/fram"
+                android:hint="请选择工序名称"
+                android:textSize="20sp"/>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:textSize="20sp"
-            android:text="选择产品："/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:background="#7AFEC6">
-            <Spinner
-                android:id="@+id/produNameSp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dialog"
-                android:background="@null"/>
-            <TextView
-                android:id="@+id/produName1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"/>
-        </LinearLayout>
+
 
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:textSize="20sp"
+            android:text="选择产品："/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35dp"
+            android:layout_weight="1"            >
+            <AutoCompleteTextView
+                android:id="@+id/outNameSearch"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="请输入品名检索"
+                android:completionThreshold="1"
+                android:dropDownHorizontalOffset="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
+            android:layout_marginStart="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:textSize="20sp"
             android:text="吹塑用瓶坯："/>
-        <Spinner
-            android:id="@+id/pingPiSpinner"
+        <LinearLayout
+            android:layout_marginEnd="35dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <AutoCompleteTextView
+                android:id="@+id/outPingpiSearch"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="请输入品名检索"
+                android:completionThreshold="1"
+                android:dropDownHorizontalOffset="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginStart="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:spinnerMode="dialog"
-            android:background="@null"/>
-        <TextView
-            android:id="@+id/pingPiName2"
-            android:layout_width="130dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="20sp"
+            android:text="选择颜色："/>
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#7AFEC6"
-            android:textSize="17sp"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="35dp"
+            android:layout_weight="1">
+            <AutoCompleteTextView
+                android:id="@+id/outColorSearch"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="请输入色母号检索"
+                android:completionThreshold="1"
+                android:dropDownHorizontalOffset="5dp" />
+        </LinearLayout>
+
+
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -99,38 +145,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="20sp"
-            android:text="选择颜色："/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="#7AFEC6"
-            android:layout_weight="1">
-            <Spinner
-                android:id="@+id/produColorSp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dialog"
-                android:background="@null"/>
-            <TextView
-                android:id="@+id/colorName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"/>
-        </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
+            android:layout_marginStart="5dp"
             android:layout_gravity="center_vertical"
             android:textSize="20sp"
             android:text="发货数量："/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp">
+            android:layout_marginEnd="20dp">
 
             <EditText
                 android:id="@+id/outAmount"
@@ -138,7 +160,18 @@
                 android:layout_height="wrap_content"
                 android:hint="输入数量"/>
         </LinearLayout>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="日   期："
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/date_textT"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="20sp"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -146,28 +179,9 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="日        期:"
-                    android:textSize="20sp"/>
-                <TextView
-                    android:id="@+id/date_textT"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"/>
-
-            </LinearLayout>
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -180,7 +194,8 @@
                     android:id="@+id/editMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:lines="2"
                     android:hint="请输入备注说明"/>
             </LinearLayout>
 
@@ -195,9 +210,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/btm2bule"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:text="添加至\n明细表"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -215,8 +230,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:gravity="left"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:text="类别"/>
         <TextView
@@ -224,14 +239,14 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:layout_weight="2"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:text="品名"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:layout_weight="1"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:text="颜色"/>
         <TextView
             android:layout_width="wrap_content"
@@ -245,18 +260,18 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:layout_weight="2"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:text="备注"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1">
         <ListView
             android:id="@+id/tempListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:listSelector="#ff7575"/>
 
     </LinearLayout>
@@ -270,7 +285,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:text="确认发货"
             android:textSize="20sp"
             android:background="@drawable/btm1green"/>
@@ -278,11 +293,11 @@
             android:id="@+id/delOkButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp"
             android:layout_weight="1"
             android:text="重新填写"
             android:textSize="20sp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/btmred"/>
 
     </LinearLayout>

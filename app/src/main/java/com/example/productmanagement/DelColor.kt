@@ -63,7 +63,7 @@ class DelColor : BaseActivity() {
                             e.printStackTrace()
                         }
                     }
-
+                   "颜色名称已删除！".showToast()
                 }
                 do {
                     val colorName = cursor.getString(cursor.getColumnIndex("produColor"))

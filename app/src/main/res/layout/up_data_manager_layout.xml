@@ -27,20 +27,45 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/delColorWork"
-            android:layout_width="wrap_content"
+            android:id="@+id/addNewProdu"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
+            android:text="增加新产品"
+            android:background="@drawable/btm2bule"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/addProduColor"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/addNewProdu"
+            android:text="增加新颜色"
+            android:background="@drawable/btm2bule"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/delColorWork"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/addProduColor"
+            android:background="@drawable/btm2red"
             android:textSize="20sp"
             android:text="删除颜色名称"/>
 
         <Button
             android:id="@+id/delProduName"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
             android:layout_below="@+id/delColorWork"
+            android:background="@drawable/btm2red"
             android:textSize="20sp"
             android:text="删除产品名称"/>
 

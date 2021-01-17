@@ -69,6 +69,7 @@ class DelProduName : BaseActivity() {
                                     e.printStackTrace()
                                 }
                             }
+                            "瓶坯名称已删除！".showToast()
                         }
                         do {
                             val produName = cursor.getString(cursor.getColumnIndex("produName"))
@@ -122,6 +123,7 @@ class DelProduName : BaseActivity() {
                                     e.printStackTrace()
                                 }
                             }
+                            "注塑件名称已删除！".showToast()
                         }
                         do {
                             val produName = cursor.getString(cursor.getColumnIndex("produName"))
@@ -175,6 +177,7 @@ class DelProduName : BaseActivity() {
                                     e.printStackTrace()
                                 }
                             }
+                            "吹塑名称已删除！".showToast()
                         }
                         do {
                             val produName = cursor.getString(cursor.getColumnIndex("produName"))
@@ -228,6 +231,7 @@ class DelProduName : BaseActivity() {
                                     e.printStackTrace()
                                 }
                             }
+                            "挤出产品名称已删除！".showToast()
                         }
                         do {
                             val produName = cursor.getString(cursor.getColumnIndex("produName"))
@@ -281,6 +285,7 @@ class DelProduName : BaseActivity() {
                                     e.printStackTrace()
                                 }
                             }
+                            "其他产品名称已删除！".showToast()
                         }
                         do {
                             val produName = cursor.getString(cursor.getColumnIndex("produName"))
@@ -308,7 +313,7 @@ class DelProduName : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        typeNameWork.text = typeList[0]
+        typeNameWork.text = ""
         typeNameWork.setOnClickListener {
             selector("选择工序名称", typeList){i ->
                 typeNameWork.text = typeList[i]

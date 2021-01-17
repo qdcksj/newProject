@@ -13,6 +13,15 @@ class UpDataManager : BaseActivity() {
         setContentView(R.layout.up_data_manager_layout)
         setSupportActionBar(toolbar)
 
+        addNewProdu.setOnClickListener {
+            val intent = Intent(this,AddProduName::class.java)
+            startActivity(intent)
+        }
+        addProduColor.setOnClickListener {
+            val intent = Intent(this, AddColorName::class.java)
+            startActivity(intent)
+        }
+
         delColorWork.setOnClickListener {
             val intent = Intent(this, DelColor::class.java)
             startActivity(intent)

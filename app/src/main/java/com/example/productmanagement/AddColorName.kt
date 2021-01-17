@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.core.content.contentValuesOf
 import kotlinx.android.synthetic.main.add_color_name.*
-import kotlinx.android.synthetic.main.add_color_name.backBtm
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
 import java.sql.SQLException
 import java.sql.Statement
@@ -28,10 +27,6 @@ class AddColorName : BaseActivity() {
             listColorName()
         }
 
-        //返回上级页面
-        backBtm.setOnClickListener {
-            finish()
-        }
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

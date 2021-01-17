@@ -11,7 +11,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.example.productmanagement.myclass.SearchAdapter
 import kotlinx.android.synthetic.main.query_in_layout.*
+import kotlinx.android.synthetic.main.query_out_layout.*
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -83,6 +85,9 @@ class QueryIn : BaseActivity()  {
             job.cancel()
         }
     }
+                reFreshBtm.setOnClickListener {
+
+                }
 
 }
 
@@ -105,13 +110,19 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val adapter1 = QueryChuisuAdapter(this, R.layout.query_chuisu_item, queryChuisuList)
         listQueryInView.adapter = adapter1
     }
-
+    private fun reFresh() {
+        initTypeSpinner()
+        initColorSpinner()
+        queryChuisuList.clear()
+        val adapterA = QueryChuisuAdapter(this, R.layout.query_chuisu_item, queryChuisuList)
+        listQueryInView.adapter = adapterA
+    }
     //查询瓶坯入库日期及数量等
     private fun queryInpingpi() {
         val date1 = startDate.text.toString()
         val date2 = lastDate.text.toString()
-        val queryInName = inProduName.text.toString()
-        val queryColor = inColorName.text.toString()
+        val queryInName = queryInNameSearch.text.toString()
+        val queryColor = queryInColorSearch.text.toString()
         try {
             thread {
                     val conn = DBUtil().conection()
@@ -176,8 +187,8 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         val date1 = startDate.text.toString()
         val date2 = lastDate.text.toString()
-        val queryInName = inProduName.text
-        val queryColor = inColorName.text
+        val queryInName = queryInNameSearch.text.toString()
+        val queryColor = queryInColorSearch.text.toString()
         try {
             thread {
                 val conn = DBUtil().conection()
@@ -238,14 +249,15 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
     private fun queryInchuisu(){
         val date1 = startDate.text.toString()
         val date2 = lastDate.text.toString()
-        val queryInName = inProduName.text
-        val queryColor = inColorName.text
+        val queryInName = queryInNameSearch.text.toString()
+        val queryColor = queryInColorSearch.text.toString()
+        val queryPingpi = queryInPingpiSearch.text.toString()
         try {
             thread {
                 val conn = DBUtil().conection()
                 when {
                     date1 == date2 -> {
-                        val sql = "SELECT * FROM chuisuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi = '$date1'"
+                        val sql = "SELECT * FROM chuisuintable where name = '$queryInName' AND pingpiname = '$queryPingpi' and  color = '$queryColor' ANd riqi = '$date1'"
                         try {
                             // 创建用来执行sql语句的对象
                             val statement: Statement = conn!!.createStatement()
@@ -255,8 +267,8 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
                                 val amount = rSet.getString("shuliang")
                                 val menu = rSet.getString("menu")
                                 val date = rSet.getString("riqi")
-                                val weight = rSet.getString("pingpiname")
-                                queryChuisuList.add(QueryChuisuProdu(date, amount, weight, menu))
+                                val pingpi = rSet.getString("pingpiname")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount, pingpi, menu))
                                 Log.d("QueryIn", "浏览入库数据成功1")
                             }
                         }catch (e:Exception){
@@ -264,7 +276,7 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
                         }
                     }
                     date1 < date2 -> {
-                        val sql = "SELECT * FROM chuisuintable where name = '$queryInName' AND color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
+                        val sql = "SELECT * FROM chuisuintable where name = '$queryInName' AND pingpiname = '$queryPingpi' and color = '$queryColor' ANd riqi >= '$date1' and riqi <= '$date2'"
                         try {
                             // 创建用来执行sql语句的对象
                             val statement: Statement = conn!!.createStatement()
@@ -274,8 +286,8 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
                                 val amount = rSet.getString("shuliang")
                                 val menu = rSet.getString("menu")
                                 val date = rSet.getString("riqi")
-                                val weight = rSet.getString("pingpiname")
-                                queryChuisuList.add(QueryChuisuProdu(date, amount, weight, menu))
+                                val pingpi = rSet.getString("pingpiname")
+                                queryChuisuList.add(QueryChuisuProdu(date, amount, pingpi, menu))
                                 //Log.d("QueryIn", "浏览入库数据成功2")
                             }
                         }catch (e:Exception){
@@ -303,8 +315,8 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
     private fun queryInjichu(){
         val date1 = startDate.text.toString()
         val date2 = lastDate.text.toString()
-        val queryInName = inProduName.text
-        val queryColor = inColorName.text
+        val queryInName = queryInNameSearch.text.toString()
+        val queryColor = queryInColorSearch.text.toString()
         try {
             thread {
                 val conn = DBUtil().conection()
@@ -368,8 +380,8 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
     private fun queryInother(){
         val date1 = startDate.text.toString()
         val date2 = lastDate.text.toString()
-        val queryInName = inProduName.text
-        val queryColor = inColorName.text
+        val queryInName = queryInNameSearch.text.toString()
+        val queryColor = queryInColorSearch.text.toString()
         try {
             thread {
                 val conn = DBUtil().conection()
@@ -441,7 +453,7 @@ private fun initTypeSpinner(){
         }while (cursor.moveToNext())
     }
     cursor.close()
-    inTypeName.text = typeList[0]
+    inTypeName.text = ""
     inTypeName.setOnClickListener {
         selector("选择工序名称", typeList){i ->
             inTypeName.text = typeList[i]
@@ -449,18 +461,23 @@ private fun initTypeSpinner(){
             when (inTypeName.text) {
                 "瓶坯注塑" -> {
                     initZhusuSpinner()
+                    queryInPingpiSearch.setText("不使用瓶坯")
                 }
                 "非瓶坯注塑" -> {
                     initOtherZhusuSpinner()
+                    queryInPingpiSearch.setText("不使用瓶坯")
                 }
                 "吹塑" -> {
                     initChuisuSpinner()
+                    initPingpiName()
                 }
                 "挤出" -> {
                     initJichuSpinner()
+                    queryInPingpiSearch.setText("不使用瓶坯")
                 }
                 "其他" -> {
                     initOtherSpinner()
+                    queryInPingpiSearch.setText("不使用瓶坯")
                 }
             }
         }
@@ -479,12 +496,8 @@ private fun initZhusuSpinner(){
         }while (cursor.moveToNext())
     }
     cursor.close()
-    inProduName.text = typeList[0]
-    inProduName.setOnClickListener {
-        selector("选择注塑产品名称", typeList){i ->
-            inProduName.text = typeList[i]
-        }
-    }
+    val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+    queryInNameSearch.setAdapter(adapter)
 }
 //初始化非瓶坯注塑产品名
 private fun initOtherZhusuSpinner(){
@@ -498,12 +511,8 @@ private fun initOtherZhusuSpinner(){
         }while (cursor.moveToNext())
     }
     cursor.close()
-    inProduName.text = typeList[0]
-    inProduName.setOnClickListener {
-        selector("选择注塑产品名称", typeList){i ->
-            inProduName.text = typeList[i]
-        }
-    }
+    val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+    queryInNameSearch.setAdapter(adapter)
 }
 private fun initChuisuSpinner(){
     val typeList = ArrayList<String>()
@@ -516,12 +525,8 @@ private fun initChuisuSpinner(){
         }while (cursor.moveToNext())
     }
     cursor.close()
-    inProduName.text = typeList[0]
-    inProduName.setOnClickListener {
-        selector("选择注塑产品名称", typeList){i ->
-            inProduName.text = typeList[i]
-        }
-    }
+    val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+    queryInNameSearch.setAdapter(adapter)
 }
 private fun initJichuSpinner(){
     val typeList = ArrayList<String>()
@@ -534,12 +539,8 @@ private fun initJichuSpinner(){
         }while (cursor.moveToNext())
     }
     cursor.close()
-    inProduName.text = typeList[0]
-    inProduName.setOnClickListener {
-        selector("选择注塑产品名称", typeList){i ->
-            inProduName.text = typeList[i]
-        }
-    }
+    val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+    queryInNameSearch.setAdapter(adapter)
 }
 private fun initOtherSpinner(){
     val typeList = ArrayList<String>()
@@ -552,13 +553,24 @@ private fun initOtherSpinner(){
         }while (cursor.moveToNext())
     }
     cursor.close()
-    inProduName.text = typeList[0]
-    inProduName.setOnClickListener {
-        selector("选择注塑产品名称", typeList){i ->
-            inProduName.text = typeList[i]
-        }
-    }
+    val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+    queryInNameSearch.setAdapter(adapter)
 }
+    //初始化吹塑用瓶坯选择
+    private fun initPingpiName(){
+        val typeList = java.util.ArrayList<String>()
+        val db = dbHelper.writableDatabase
+        val cursor = db.query("nativeZhusu",null,null,null,null,null,null)
+        if (cursor.moveToFirst()){
+            do {
+                val typeName = cursor.getString(cursor.getColumnIndex("produName"))
+                typeList.add(typeName)
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        queryInPingpiSearch.setAdapter(adapter)
+    }
 
 //初始化颜色名
 private fun initColorSpinner(){
@@ -572,12 +584,8 @@ private fun initColorSpinner(){
         }while (cursor.moveToNext())
     }
     cursor.close()
-    inColorName.text = typeList[0]
-    inColorName.setOnClickListener {
-        selector("选择注塑产品名称", typeList){i ->
-            inColorName.text = typeList[i]
-        }
-    }
+    val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+    queryInColorSearch.setAdapter(adapter)
 }
 
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="#bfefff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -14,18 +15,24 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:titleTextAppearance="@style/Toolbar.TitleText"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="选择需要删除的颜色，按删除键"
-        android:textSize="20sp"/>
-
     <Button
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
         android:id="@+id/queryColor"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:textSize="15sp"
+        android:background="@drawable/btm2bule"
         android:text="显示颜色名称"/>
+
+    <TextView
+        android:layout_marginStart="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择需要删除的颜色，按删除键删除"
+        android:textSize="20sp"/>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"

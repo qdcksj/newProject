@@ -25,7 +25,7 @@ class AddProduName : BaseActivity() {
         //添加产品按键点击
         addNewPM.setOnClickListener {
             addNewProdu()
-            "添加产品名称成功！"
+            "添加产品名称成功！".showToast()
         }
 
         //显示产品目录点击
@@ -49,9 +49,7 @@ class AddProduName : BaseActivity() {
             }
         }
         //返回上级页面按键
-        backBtm.setOnClickListener {
-            finish()
-        }
+
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar, menu)
@@ -78,7 +76,7 @@ class AddProduName : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        typeName.text = typeList[0]
+        typeName.text = ""
         typeName.setOnClickListener {
             selector("选择工序名称", typeList){i ->  
                 typeName.text = typeList[i]

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.example.productmanagement.myclass.SearchAdapter
 import kotlinx.android.synthetic.main.in_bound_layout.*
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
 import org.jetbrains.anko.selector
@@ -28,15 +29,9 @@ class InBound : BaseActivity() {
 
         reFresh.setOnClickListener {
             freshInBound()
+            "刷新成功！".showToast()
         }
-        addNewProdu.setOnClickListener {
-            val intent = Intent(this,AddProduName::class.java)
-            startActivity(intent)
-        }
-        addProduColor.setOnClickListener {
-            val intent = Intent(this, AddColorName::class.java)
-            startActivity(intent)
-        }
+
 
     }
 
@@ -53,7 +48,7 @@ class InBound : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        lineSpiner.text = typeList[0]
+        lineSpiner.text = ""
         lineSpiner.setOnClickListener {
             selector("选择工序名称", typeList){i ->
                 lineSpiner.text = typeList[i]
@@ -65,18 +60,19 @@ class InBound : BaseActivity() {
                     }
                     "瓶坯注塑" -> {
                         initZhusuName()
-                        pingPiName1.text = "不使用瓶坯"
+                        pingpiSerch.setText("不使用瓶坯")
                     }
                     "非瓶坯注塑" -> {
                         initOtherZhusuName()
-                        pingPiName1.text = "不使用瓶坯"
+                        pingpiSerch.setText("不使用瓶坯")
                     }
                     "挤出" -> {
-                        pingPiName1.text = "不使用瓶坯"
+                        pingpiSerch.setText("不使用瓶坯")
                         initJichuName()
                     }
                     "其他" -> {
                         initOtherName()
+                        pingpiSerch.setText("不使用瓶坯")
                     }
                 }
 
@@ -87,22 +83,27 @@ class InBound : BaseActivity() {
                             chusuInBound()
                             chusuAndPingpiOut()
                             "吹塑产品保存成功".showToast()
+                            freshInBound()
                         }
                         "瓶坯注塑" -> {
                             zhusuInBound()
                             "注塑瓶坯保存成功".showToast()
+                            freshInBound()
                         }
                         "非瓶坯注塑" -> {
                             zhusuOtherInBound()
                             "其他注塑产品保存成功".showToast()
+                            freshInBound()
                         }
                         "挤出" -> {
                             jichuInBound()
                             "挤出产品保存成功".showToast()
+                            freshInBound()
                         }
                         "其他" -> {
                             otherInBound()
                             "其他产品保存成功".showToast()
+                            freshInBound()
                         }
                     }
                 }
@@ -125,9 +126,9 @@ class InBound : BaseActivity() {
 
     //瓶坯注塑产品入库
     private fun zhusuInBound(){
-        val produName = spiner11.text
+        val produName = nameSerch.text
         val weight = produWeightBt.text.toString()
-        val colorName = spiner2.text
+        val colorName = colorSerch.text.toString()
         val amount = editProduAmount.text.toString()
         val date1 = Date().getNowDate()
         val menu = editProduMenu.text.toString()
@@ -192,9 +193,9 @@ class InBound : BaseActivity() {
     //非瓶坯注塑产品入库
     private fun zhusuOtherInBound(){
 
-        val produName = spiner11.text
+        val produName = nameSerch.text
         val weight = produWeightBt.text
-        val colorName = spiner2.text
+        val colorName = colorSerch.text.toString()
         val amount = editProduAmount.text
         val date1 = Date().getNowDate()
         val menu = editProduMenu.text
@@ -259,12 +260,12 @@ class InBound : BaseActivity() {
 
     //吹塑产品入库
     private fun chusuInBound(){
-        val pingpiName = pingPiName1.text
-        val produName = spiner11.text
-        val colorName = spiner2.text
-        val amount = editProduAmount.text
+        val pingpiName = pingpiSerch.text.toString()
+        val produName = nameSerch.text.toString()
+        val colorName = colorSerch.text.toString()
+        val amount = editProduAmount.text.toString()
         val date1 = Date().getNowDate()
-        val menu = editProduMenu.text
+        val menu = editProduMenu.text.toString()
         val user1 = getUser()
         try {
             thread {
@@ -320,11 +321,11 @@ class InBound : BaseActivity() {
     }
     //吹塑相关的瓶坯出库记录操作
     private fun chusuAndPingpiOut(){
-        val pingpiName = pingPiName1.text
-        val colorName = spiner2.text
-        val amount = editProduAmount.text
+        val pingpiName = pingpiSerch.text.toString()
+        val colorName = colorSerch.text.toString()
+        val amount = editProduAmount.text.toString()
         val date1 = Date().getNowDate()
-        val menu = editProduMenu.text
+        val menu = editProduMenu.text.toString()
         val user1 = getUser()
         try {
             thread {
@@ -384,12 +385,12 @@ class InBound : BaseActivity() {
     //挤出产品入库
     private fun jichuInBound(){
 
-        val produName = spiner11.text
-        val weight = produWeightBt.text
-        val colorName = spiner2.text
-        val amount = editProduAmount.text
+        val produName = nameSerch.text.toString()
+        val weight = produWeightBt.text.toString()
+        val colorName = colorSerch.text.toString()
+        val amount = editProduAmount.text.toString()
         val date1 = Date().getNowDate()
-        val menu = editProduMenu.text
+        val menu = editProduMenu.text.toString()
         val user1 = getUser()
         try {
             thread {
@@ -450,12 +451,12 @@ class InBound : BaseActivity() {
     }
     //其他产品入库
     private fun otherInBound(){
-        val produName = spiner11.text
-        val weight = produWeightBt.text
-        val colorName = spiner2.text
-        val amount = editProduAmount.text
+        val produName = nameSerch.text.toString()
+        val weight = produWeightBt.text.toString()
+        val colorName = colorSerch.text.toString()
+        val amount = editProduAmount.text.toString()
         val date1 = Date().getNowDate()
-        val menu = editProduMenu.text
+        val menu = editProduMenu.text.toString()
         val user1 = getUser()
         try {
             thread {
@@ -517,6 +518,9 @@ class InBound : BaseActivity() {
     private fun freshInBound(){
         initColorName()
         initTypeName()
+        produWeightBt.setText("")
+        editProduAmount.setText("")
+        editProduMenu.setText("")
 
     }
 
@@ -533,12 +537,8 @@ class InBound : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        spiner11.text = typeList[0]
-        spiner11.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                spiner11.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        nameSerch.setAdapter(adapter)
     }
     private fun initChuisuName(){
         val typeList = ArrayList<String>()
@@ -551,12 +551,8 @@ class InBound : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        spiner11.text = typeList[0]
-        spiner11.setOnClickListener {
-            selector("选择吹塑产品名称", typeList){i ->
-                spiner11.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        nameSerch.setAdapter(adapter)
     }
     private fun initJichuName(){
         val typeList = ArrayList<String>()
@@ -569,12 +565,8 @@ class InBound : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        spiner11.text = typeList[0]
-        spiner11.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                spiner11.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        nameSerch.setAdapter(adapter)
     }
     private fun initOtherName(){
         val typeList = ArrayList<String>()
@@ -587,12 +579,8 @@ class InBound : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        spiner11.text = typeList[0]
-        spiner11.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                spiner11.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        nameSerch.setAdapter(adapter)
     }
 
     //初始化颜色名
@@ -607,12 +595,8 @@ class InBound : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        spiner2.text = typeList[0]
-        spiner2.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                spiner2.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        colorSerch.setAdapter(adapter)
     }
     //初始化非瓶坯注塑产品名
     private fun initOtherZhusuName(){
@@ -626,12 +610,8 @@ class InBound : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        spiner11.text = typeList[0]
-        spiner11.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                spiner11.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        nameSerch.setAdapter(adapter)
     }
     //初始化吹塑用瓶坯选择
     private fun initPingpiName(){
@@ -645,12 +625,8 @@ class InBound : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        pingPiName1.text = typeList[0]
-        pingPiName1.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                pingPiName1.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        pingpiSerch.setAdapter(adapter)
     }
     //获取操作者名称
     private fun getUser(): String? {

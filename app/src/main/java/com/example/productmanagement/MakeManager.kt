@@ -70,6 +70,7 @@ class MakeManager : BaseActivity() {
                 startActivity(intent)
             }
         }
+
     }
     //屏蔽返回键
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

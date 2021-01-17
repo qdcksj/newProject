@@ -1,11 +1,16 @@
 package com.example.productmanagement
-
+/*
+*产品出库操作
+* 2021.1.17@qdzsd
+*
+ */
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.contentValuesOf
+import com.example.productmanagement.myclass.SearchAdapter
 import kotlinx.android.synthetic.main.out_bound_layout.*
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
 import org.jetbrains.anko.selector
@@ -62,7 +67,7 @@ class OutBound : BaseActivity(){
             }while (cursor.moveToNext())
         }
         cursor.close()
-        produTypeName.text = typeList[0]
+        produTypeName.text = ""
         produTypeName.setOnClickListener {
             selector("选择工序名称", typeList){i ->
                 produTypeName.text = typeList[i]
@@ -70,11 +75,11 @@ class OutBound : BaseActivity(){
                 when (produTypeName.text) {
                     "瓶坯注塑" -> {
                         initZhusuName()
-                        pingPiName2.text = "非吹塑"
+                        outPingpiSearch.setText("不使用瓶坯")
                     }
                     "非瓶坯注塑" -> {
                         initOtherZhusuName()
-                        pingPiName2.text = "非吹塑"
+                        outPingpiSearch.setText("不使用瓶坯")
                     }
                     "吹塑" -> {
                         initChuisuName()
@@ -82,11 +87,11 @@ class OutBound : BaseActivity(){
                     }
                     "挤出" -> {
                         initJichuName()
-                        pingPiName2.text = "非吹塑"
+                        outPingpiSearch.setText("不使用瓶坯")
                     }
                     "其他" -> {
                         initOtherName()
-                        pingPiName2.text = "非吹塑"
+                        outPingpiSearch.setText("不使用瓶坯")
                     }
                 }
 
@@ -273,17 +278,18 @@ class OutBound : BaseActivity(){
     }
     //添加到临时数据库
     private fun initAddTemp(){
-        val line = produTypeName.text
-        val produName = produName1.text
-        val pingpiNM = pingPiName2.text
-        val colorNM = colorName.text
-        val outPro = outAmount.text
-        val menuPro = editMenu.text
+        val line = produTypeName.text.toString()
+        val produName = outNameSearch.text.toString()
+        val pingpiNM = outPingpiSearch.text.toString()
+        val colorNM = outColorSearch.text.toString()
+        val outPro = outAmount.text.toString()
+        val menuPro = editMenu.text.toString()
 
         val db = dbHelper.writableDatabase
 
-        val values = contentValuesOf("lineName" to "$line","produName" to " $produName", "pingpiName" to "$pingpiNM", "produColor" to "$colorNM",
-            "outAmount" to "$outPro", "produMenu" to "$menuPro")
+        val values = contentValuesOf("lineName" to line,"produName" to " $produName", "pingpiName" to pingpiNM, "produColor" to colorNM,
+            "outAmount" to outPro, "produMenu" to menuPro
+        )
         db.insert("nativeOutTable", null, values)
         //Log.d("OutBound", "本地临时库已更新")
     }
@@ -298,16 +304,11 @@ class OutBound : BaseActivity(){
             val adapter = OutProduAdapter(this,R.layout.out_produ_item, outProduList)
             tempListView.adapter = adapter
             //Log.d("OutBound", "列表已更新")
-
-            tempListView.setOnItemClickListener { _, _, position, _ ->
-                val selectLine = outProduList[position]
-                val shuliang = selectLine.outAmount
+                //重新填写
                 delOkButton.setOnClickListener {
-                    db.delete("nativeOutTable", "outAmount == ?", arrayOf(shuliang))
+                    db.delete("nativeOutTable", null,null)
                     outProduList.clear()
                     adapter.notifyDataSetChanged()
-            }
-
             }
             do {
                 val type = cursor.getString(cursor.getColumnIndex("lineName"))
@@ -334,12 +335,8 @@ class OutBound : BaseActivity(){
             }while (cursor.moveToNext())
         }
         cursor.close()
-        produName1.text = typeList[0]
-        produName1.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                produName1.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        outNameSearch.setAdapter(adapter)
     }
     //初始化非瓶坯注塑产品名
     private fun initOtherZhusuName(){
@@ -353,12 +350,8 @@ class OutBound : BaseActivity(){
             }while (cursor.moveToNext())
         }
         cursor.close()
-        produName1.text = typeList[0]
-        produName1.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                produName1.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        outNameSearch.setAdapter(adapter)
     }
     private fun initChuisuName(){
         val typeList = ArrayList<String>()
@@ -371,12 +364,8 @@ class OutBound : BaseActivity(){
             }while (cursor.moveToNext())
         }
         cursor.close()
-        produName1.text = typeList[0]
-        produName1.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                produName1.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        outNameSearch.setAdapter(adapter)
     }
     private fun initJichuName(){
         val typeList = ArrayList<String>()
@@ -389,12 +378,8 @@ class OutBound : BaseActivity(){
             }while (cursor.moveToNext())
         }
         cursor.close()
-        produName1.text = typeList[0]
-        produName1.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                produName1.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        outNameSearch.setAdapter(adapter)
     }
     private fun initOtherName(){
         val typeList = ArrayList<String>()
@@ -407,12 +392,8 @@ class OutBound : BaseActivity(){
             }while (cursor.moveToNext())
         }
         cursor.close()
-        produName1.text = typeList[0]
-        produName1.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                produName1.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        outNameSearch.setAdapter(adapter)
     }
 
     //初始化吹塑用瓶坯选择
@@ -427,12 +408,8 @@ class OutBound : BaseActivity(){
             }while (cursor.moveToNext())
         }
         cursor.close()
-        pingPiName2.text = typeList[0]
-        pingPiName2.setOnClickListener {
-            selector("选择瓶坯名称", typeList){i ->
-                pingPiName2.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        outPingpiSearch.setAdapter(adapter)
     }
 
     //初始化颜色名称
@@ -447,12 +424,8 @@ class OutBound : BaseActivity(){
             }while (cursor.moveToNext())
         }
         cursor.close()
-        colorName.text = typeList[0]
-        colorName.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                colorName.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        outColorSearch.setAdapter(adapter)
     }
 
 

@@ -1,10 +1,14 @@
 package com.example.productmanagement
-
+/*
+*库存数据查询计算
+* 2021.1.17@qdzsd
+ */
 
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.example.productmanagement.myclass.SearchAdapter
 import kotlinx.android.synthetic.main.query_in_out_layout.*
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
 import org.jetbrains.anko.selector
@@ -33,9 +37,6 @@ class QueryInOut : BaseActivity() {
                 val sumAll = sumIn.toInt() - sumOut.toInt()
                 queryAllTitle.text = sumAll.toString()
             }
-        }
-        finishButton.setOnClickListener {
-            ActivityCollector.finishAll()
         }
 
     }
@@ -76,8 +77,8 @@ class QueryInOut : BaseActivity() {
 
     //瓶坯出入库统计
     private fun zhusuInOut() {
-        val produName = outInProduName.text.toString()
-        val produColor = outInColorName.text.toString()
+        val produName = inOutNameSearch.text.toString()
+        val produColor = inOutColorSearch.text.toString()
         val queryInList1 = ArrayList<Int>()
         val queryOutList2 = ArrayList<Int>()
         try {
@@ -153,14 +154,14 @@ class QueryInOut : BaseActivity() {
 
     //非瓶坯出入库统计
     private fun otherZhusuInOut(){
-        val produName = outInProduName.text.toString()
-        val produColor = outInColorName.text.toString()
+        val produName = inOutNameSearch.text.toString()
+        val produColor = inOutColorSearch.text.toString()
         val queryInList = ArrayList<Int>()
         val queryOutList = ArrayList<Int>()
         try {
             thread {
                 val conn = DBUtil().conection()
-                val sql1 = "SELECT * FROM zhusuotherintable where name = $produName AND color = $produColor"
+                val sql1 = "SELECT * FROM zhusuotherintable where name = '$produName' AND color = '$produColor'"
                 try {
                     // 创建用来执行sql语句的对象
                     val statement: Statement = conn!!.createStatement()
@@ -187,7 +188,7 @@ class QueryInOut : BaseActivity() {
             }
             thread {
                 val conn = DBUtil().conection()
-                val sql2 = "SELECT * FROM zhusuotherouttable where name = $produName AND color = $produColor"
+                val sql2 = "SELECT * FROM zhusuotherouttable where name = '$produName' AND color = '$produColor'"
                 try {
                     // 创建用来执行sql语句的对象
                     val statement: Statement = conn!!.createStatement()
@@ -219,14 +220,15 @@ class QueryInOut : BaseActivity() {
 
     //吹塑出入库统计
     private fun chuisuInOut(){
-        val produName = outInProduName.text.toString()
-        val produColor = outInColorName.text.toString()
+        val produName = inOutNameSearch.text.toString()
+        val produColor = inOutColorSearch.text.toString()
+        val pingpi = inOutPingpiSearch.text.toString()
         val queryInList = ArrayList<Int>()
         val queryOutList = ArrayList<Int>()
         try {
             thread {
                 val conn = DBUtil().conection()
-                val sql1 = "SELECT * FROM chuisuintable where name = $produName AND color = $produColor"
+                val sql1 = "SELECT * FROM chuisuintable where name = '$produName' AND pingpiname = '$pingpi' and  color = '$produColor'"
                 try {
                     // 创建用来执行sql语句的对象
                     val statement: Statement = conn!!.createStatement()
@@ -253,7 +255,7 @@ class QueryInOut : BaseActivity() {
             }
             thread {
                 val conn = DBUtil().conection()
-                val sql2 = "SELECT * FROM chuisuouttable where name = $produName AND color = $produColor"
+                val sql2 = "SELECT * FROM chuisuouttable where name = '$produName' AND pingpiname = '$pingpi' and  color = '$produColor'"
                 try {
                     // 创建用来执行sql语句的对象
                     val statement: Statement = conn!!.createStatement()
@@ -285,14 +287,14 @@ class QueryInOut : BaseActivity() {
 
     //挤出出入库统计
     private fun jichuInOut(){
-        val produName = outInProduName.text.toString()
-        val produColor = outInColorName.text.toString()
+        val produName = inOutNameSearch.text.toString()
+        val produColor = inOutColorSearch.text.toString()
         val queryInList = ArrayList<Int>()
         val queryOutList = ArrayList<Int>()
         try {
             thread {
                 val conn = DBUtil().conection()
-                val sql1 = "SELECT * FROM jichuintable where name = $produName AND color = $produColor"
+                val sql1 = "SELECT * FROM jichuintable where name = '$produName' AND color = '$produColor'"
                 try {
                     // 创建用来执行sql语句的对象
                     val statement: Statement = conn!!.createStatement()
@@ -319,7 +321,7 @@ class QueryInOut : BaseActivity() {
             }
             thread {
                 val conn = DBUtil().conection()
-                val sql2 = "SELECT * FROM jichuouttable where name = $produName AND color = $produColor"
+                val sql2 = "SELECT * FROM jichuouttable where name = '$produName' AND color = '$produColor'"
                 try {
                     // 创建用来执行sql语句的对象
                     val statement: Statement = conn!!.createStatement()
@@ -351,14 +353,14 @@ class QueryInOut : BaseActivity() {
 
     //其他出入库统计
     private fun otherInOut(){
-        val produName = outInProduName.text.toString()
-        val produColor = outInColorName.text.toString()
+        val produName = inOutNameSearch.text.toString()
+        val produColor = inOutColorSearch.text.toString()
         val queryInList = ArrayList<Int>()
         val queryOutList = ArrayList<Int>()
         try {
             thread {
                 val conn = DBUtil().conection()
-                val sql1 = "SELECT * FROM otherintable where name = $produName AND color = $produColor"
+                val sql1 = "SELECT * FROM otherintable where name = '$produName' AND color = '$produColor'"
                 try {
                     // 创建用来执行sql语句的对象
                     val statement: Statement = conn!!.createStatement()
@@ -385,7 +387,7 @@ class QueryInOut : BaseActivity() {
             }
             thread {
                 val conn = DBUtil().conection()
-                val sql2 = "SELECT * FROM otherouttable where name = $produName AND color = $produColor"
+                val sql2 = "SELECT * FROM otherouttable where name = '$produName' AND color = '$produColor'"
                 try {
                     // 创建用来执行sql语句的对象
                     val statement: Statement = conn!!.createStatement()
@@ -427,25 +429,30 @@ class QueryInOut : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        outInTypeName.text = typeList[0]
+        outInTypeName.text = ""
         outInTypeName.setOnClickListener {
             selector("选择工序名称", typeList){i ->
                 outInTypeName.text = typeList[i]
                 when (outInTypeName.text) {
                     "瓶坯注塑" -> {
                         initZhusuSpinner()
+                        inOutPingpiSearch.setText("不使用瓶坯")
                     }
                     "非瓶坯注塑" -> {
                         initOtherZhusuSpinner()
+                        inOutPingpiSearch.setText("不使用瓶坯")
                     }
                     "吹塑" -> {
                         initChuisuSpinner()
+                        initPingpiName()
                     }
                     "挤出" -> {
                         initJichuSpinner()
+                        inOutPingpiSearch.setText("不使用瓶坯")
                     }
                     "其他" -> {
                         initOtherSpinner()
+                        inOutPingpiSearch.setText("不使用瓶坯")
                     }
                 }
             }
@@ -464,12 +471,8 @@ class QueryInOut : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        outInProduName.text = typeList[0]
-        outInProduName.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                outInProduName.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        inOutNameSearch.setAdapter(adapter)
     }
     //初始化非瓶坯注塑产品名
     private fun initOtherZhusuSpinner(){
@@ -483,12 +486,8 @@ class QueryInOut : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        outInProduName.text = typeList[0]
-        outInProduName.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                outInProduName.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        inOutNameSearch.setAdapter(adapter)
     }
     private fun initChuisuSpinner(){
         val typeList = ArrayList<String>()
@@ -501,12 +500,8 @@ class QueryInOut : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        outInProduName.text = typeList[0]
-        outInProduName.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                outInProduName.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        inOutNameSearch.setAdapter(adapter)
     }
     private fun initJichuSpinner(){
         val typeList = ArrayList<String>()
@@ -519,12 +514,8 @@ class QueryInOut : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        outInProduName.text = typeList[0]
-        outInProduName.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                outInProduName.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        inOutNameSearch.setAdapter(adapter)
     }
     private fun initOtherSpinner(){
         val typeList = ArrayList<String>()
@@ -537,13 +528,25 @@ class QueryInOut : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        outInProduName.text = typeList[0]
-        outInProduName.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                outInProduName.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        inOutNameSearch.setAdapter(adapter)
     }
+    //初始化吹塑用瓶坯选择
+    private fun initPingpiName(){
+        val typeList = java.util.ArrayList<String>()
+        val db = dbHelper.writableDatabase
+        val cursor = db.query("nativeZhusu",null,null,null,null,null,null)
+        if (cursor.moveToFirst()){
+            do {
+                val typeName = cursor.getString(cursor.getColumnIndex("produName"))
+                typeList.add(typeName)
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        inOutPingpiSearch.setAdapter(adapter)
+    }
+
 
     //初始化颜色名
     private fun initColorSpinner(){
@@ -557,12 +560,8 @@ class QueryInOut : BaseActivity() {
             }while (cursor.moveToNext())
         }
         cursor.close()
-        outInColorName.text = typeList[0]
-        outInColorName.setOnClickListener {
-            selector("选择注塑产品名称", typeList){i ->
-                outInColorName.text = typeList[i]
-            }
-        }
+        val adapter = SearchAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, typeList)
+        inOutColorSearch.setAdapter(adapter)
     }
 
 

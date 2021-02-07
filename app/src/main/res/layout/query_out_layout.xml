@@ -130,18 +130,18 @@
 
             <Button
                 android:id="@+id/outQueryBtm"
-                android:layout_width="60sp"
-                android:layout_height="60sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/btmgreen1"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:text="查询"/>
 
             <Button
                 android:id="@+id/reFreshQueryBtm"
-                android:layout_width="60sp"
-                android:layout_height="60sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/btmgreen1"

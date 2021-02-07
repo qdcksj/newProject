@@ -42,64 +42,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
+                    android:layout_marginLeft="80dp"
                     android:layout_gravity="center"
-                    android:text="姓    名："
-                    android:textSize="20sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <EditText
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/nameReg"/>
-            </LinearLayout>
-
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
-                    android:layout_gravity="center"
-                    android:text="手机号："
-                    android:textSize="20sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <EditText
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/keyWordReg"/>
-            </LinearLayout>
-
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
-                    android:layout_gravity="center"
-                    android:text="部    门："
-                    android:textSize="20sp"/>
+                    android:text="选择部门："
+                    android:textSize="18sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,7 +67,93 @@
                     android:textColorLink="#000000"
                     android:gravity="center"
                     android:textColor="#000"
-                    android:textSize="20sp"/>
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_gravity="center"
+                    android:text="输入姓名："
+                    android:textSize="18sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:id="@+id/nameReg"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_gravity="center"
+                    android:text="输入密码："
+                    android:textSize="18sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:textSize="18sp"
+                    android:id="@+id/keyWord1"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_gravity="center"
+                    android:text="确认密码："
+                    android:textSize="18sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:textSize="18sp"
+                    android:id="@+id/keyWord2"/>
             </LinearLayout>
 
         </LinearLayout>

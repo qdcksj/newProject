@@ -38,6 +38,7 @@ dependencies {
     implementation 'org.jetbrains.anko:anko-support-v4:0.8.2' // In case you need support-v4 bindings
     implementation 'org.jetbrains.anko:anko-appcompat-v7:0.8.2' // For appcompat-v7 bindings
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1"
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
 
 
 }

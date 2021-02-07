@@ -1,7 +1,6 @@
 package com.example.productmanagement
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -55,22 +54,27 @@ class InBound : BaseActivity() {
 
                 when (lineSpiner.text) {
                     "吹塑" -> {
+                        nameSerch.setText("")
                         initChuisuName()
                         initPingpiName()
                     }
                     "瓶坯注塑" -> {
+                        nameSerch.setText("")
                         initZhusuName()
                         pingpiSerch.setText("不使用瓶坯")
                     }
                     "非瓶坯注塑" -> {
+                        nameSerch.setText("")
                         initOtherZhusuName()
                         pingpiSerch.setText("不使用瓶坯")
                     }
                     "挤出" -> {
+                        nameSerch.setText("")
                         pingpiSerch.setText("不使用瓶坯")
                         initJichuName()
                     }
                     "其他" -> {
+                        nameSerch.setText("")
                         initOtherName()
                         pingpiSerch.setText("不使用瓶坯")
                     }

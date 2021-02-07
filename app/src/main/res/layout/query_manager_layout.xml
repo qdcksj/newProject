@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00bfff">
+    android:background="#1e90ff">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -16,30 +16,32 @@
         app:titleTextAppearance="@style/Toolbar.TitleText"/>
 
     <RelativeLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Button
             android:id="@+id/titleList"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_below="@+id/outList"
             android:background="@drawable/btm2green"
             android:textSize="25sp"
             android:text="库存查询"/>
         <Button
             android:id="@+id/outList"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_above="@+id/titleList"
+
             android:background="@drawable/btm2green"
             android:layout_marginBottom="20dp"
             android:textSize="25sp"
             android:text="出库查询"/>
         <Button
             android:id="@+id/inList"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_above="@+id/outList"
@@ -47,19 +49,20 @@
             android:background="@drawable/btm2green"
             android:textSize="25sp"
             android:text="入库查询"/>
-        <Button
-            android:id="@+id/finishBtm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/titleList"
-            android:background="@drawable/btm2red"
-            android:layout_marginTop="20dp"
-            android:textSize="25sp"
-            android:text="退出系统"/>
-
-
-
     </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/activity_gif_giv"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:src="@drawable/icon"/>
+
+    </LinearLayout>
 
 </LinearLayout>

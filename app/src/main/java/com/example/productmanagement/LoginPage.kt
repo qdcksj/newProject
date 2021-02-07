@@ -2,6 +2,7 @@ package com.example.productmanagement
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.contentValuesOf
 import kotlinx.android.synthetic.main.activity_login_page.*
 import java.sql.*
@@ -15,10 +16,10 @@ class LoginPage : BaseActivity() {
         logoutBtm.setOnClickListener {
             ActivityCollector.finishAll()
         }
-//        regBtm.setOnClickListener {
-//            val intent = Intent(this,RegEdit::class.java)
-//            startActivity(intent)
-//        }
+        regBtm.setOnClickListener {
+            val intent = Intent(this,RegEdit::class.java)
+            startActivity(intent)
+        }
 
         loginBtm.setOnClickListener {
             loginto()
@@ -36,7 +37,7 @@ class LoginPage : BaseActivity() {
                     val statement: Statement = conn!!.createStatement()
                     // 执行sql查询语句并获取查询信息
                     val rSet: ResultSet = statement.executeQuery(sql)
-
+                    keywordEdit.visibility = View.VISIBLE
                     val name = nameEdit.text.toString()
                     val keyword = keywordEdit.text.toString()
 

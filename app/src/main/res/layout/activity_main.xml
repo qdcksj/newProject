@@ -34,13 +34,15 @@
             android:layout_below="@+id/management"
             android:layout_marginTop="20dp"
             android:layout_centerInParent="true"
-            android:text="（2020第一版）"
+            android:text="（2021第一版）"
             android:textSize="20sp"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
+
+
 
         <Button
             android:id="@+id/intoManagement"

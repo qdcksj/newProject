@@ -18,6 +18,7 @@ import java.sql.SQLException
 import java.sql.Statement
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Suppress("DEPRECATION")
 class OutBound : BaseActivity(){
@@ -74,22 +75,27 @@ class OutBound : BaseActivity(){
 
                 when (produTypeName.text) {
                     "瓶坯注塑" -> {
+                        reFresh()
                         initZhusuName()
                         outPingpiSearch.setText("不使用瓶坯")
                     }
                     "非瓶坯注塑" -> {
+                        reFresh()
                         initOtherZhusuName()
                         outPingpiSearch.setText("不使用瓶坯")
                     }
                     "吹塑" -> {
+                        reFresh()
                         initChuisuName()
                         initPingpiName()
                     }
                     "挤出" -> {
+                        reFresh()
                         initJichuName()
                         outPingpiSearch.setText("不使用瓶坯")
                     }
                     "其他" -> {
+                        reFresh()
                         initOtherName()
                         outPingpiSearch.setText("不使用瓶坯")
                     }
@@ -97,6 +103,13 @@ class OutBound : BaseActivity(){
 
             }
         }
+    }
+
+    private fun reFresh(){
+        outNameSearch.setText("")
+        outColorSearch.setText("")
+        outAmount.setText("")
+        editMenu.setText("")
     }
 
     //保存至远程数据库，依据不同类型，保存至不同数据库
@@ -304,12 +317,28 @@ class OutBound : BaseActivity(){
             val adapter = OutProduAdapter(this,R.layout.out_produ_item, outProduList)
             tempListView.adapter = adapter
             //Log.d("OutBound", "列表已更新")
-                //重新填写
+            tempListView.setOnItemClickListener { _, _, position, _ ->
+                val selectItem = outProduList[position]
+                val item1 = selectItem.produName
+                val item2 = selectItem.produColor
+                val item3 = selectItem.outAmount
+                val item4 = selectItem.produMenu
+                val item5 = selectItem.typeName
+
+                //@@@@@@@单项删除
+                testDel.setOnClickListener {
+                    db.delete("nativeOutTable","lineName==? and produName==?  and produColor==?  and outAmount==? and produMenu==?",
+                    arrayOf(item5,item1,item2,item3,item4) )
+                    outProduList.remove(selectItem)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+                //全部删除
                 delOkButton.setOnClickListener {
                     db.delete("nativeOutTable", null,null)
                     outProduList.clear()
                     adapter.notifyDataSetChanged()
-            }
+                }
             do {
                 val type = cursor.getString(cursor.getColumnIndex("lineName"))
                 val name = cursor.getString(cursor.getColumnIndex("produName"))

@@ -25,9 +25,6 @@ class QueryManager : BaseActivity() {
             val intent = Intent(this, QueryIn::class.java)
             startActivity(intent)
         }
-        finishBtm.setOnClickListener {
-            ActivityCollector.finishAll()
-        }
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

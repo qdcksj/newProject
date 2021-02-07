@@ -1,17 +1,38 @@
 package com.example.productmanagement
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.Log
-import kotlinx.android.synthetic.main.activity_login_page.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.reg_edit_layout.*
-import kotlinx.android.synthetic.main.super_manager_layout.*
 import kotlinx.android.synthetic.main.super_manager_layout.toolbar
 import org.jetbrains.anko.selector
+import java.lang.Runnable
 import java.sql.*
+import kotlin.concurrent.thread
 
+
+@Suppress("DEPRECATION")
 class RegEdit : AppCompatActivity() {
+    private val nameList = ArrayList<String>()
+
+    val updateList1 = 1
+    private val handler = @SuppressLint("HandlerLeak")
+    object : Handler(){
+        @SuppressLint("HandlerLeak")
+        override fun handleMessage(msg1: Message) {
+            when (msg1.what){
+                updateList1 -> dialog()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reg_edit_layout)
@@ -20,12 +41,109 @@ class RegEdit : AppCompatActivity() {
         initdepartment()
 
         regBtm1.setOnClickListener {
-            saveUser()
-        }
+            val keywordA = keyWord1.text.toString()
+            val keywordB = keyWord2.text.toString()
+            val nameEdit = nameReg.text.toString()
+            if (nameEdit.isNotEmpty()){
+                getUser()
+                if (keywordA.isNotEmpty()){
+                    if (keywordA == keywordB){
+                         saveUser()
+                        "注册成功！".showToast()
 
+                    }else{
+                        AlertDialog.Builder(this).apply {
+                            setTitle("请注意！")
+                            setMessage("两次输入的密码不相等！")
+                            setCancelable((false))
+                            setPositiveButton(("确定")){ _, _ -> }
+                            show()
+                        }
+                    }
+                }else{
+                    AlertDialog.Builder(this).apply {
+                        setTitle("请注意！")
+                        setMessage("密码不能为空！")
+                        setCancelable((false))
+                        setPositiveButton(("确定")){ _, _ -> }
+                        show()
+                    }
+                }
+            }else{
+                AlertDialog.Builder(this).apply {
+                    setTitle("请注意！")
+                    setMessage("姓名不能为空！")
+                    setCancelable((false))
+                    setPositiveButton(("确定")){ _, _ -> }
+                    show()
+                }
+            }
+        }
     }
-    fun initdepartment(){
-        val departmentArray = listOf("选择部门", "生产", "仓库", "品管", "财务", "总经理")
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.backup ->finish()
+            R.id.finish ->ActivityCollector.finishAll()
+        }
+        return true
+    }
+
+    //警告对话框
+    private fun dialog(){
+        AlertDialog.Builder(this).apply {
+            setTitle("请注意！")
+            setMessage("名称重复")
+            setCancelable((false))
+            setPositiveButton(("确定")){ _, _ -> }
+            show()
+        }
+    }
+
+    //获取名单
+    private fun getUser(){
+        try {
+            thread {
+                val conn = DBUtil().conection()
+                val sql = "SELECT * FROM users"
+                try {
+                    val statement: Statement = conn!!.createStatement()
+                    // 执行sql查询语句并获取查询信息
+                    val rSet: ResultSet = statement.executeQuery(sql)
+                    while (rSet.next()){
+                        val searchName = rSet.getString("name")
+                        nameList.add(searchName)
+                    }
+                    searchName()
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
+
+    //姓名不为空时查询是否重名
+    private fun searchName(){
+
+        val nameEdit = nameReg.text.toString()
+
+        if (nameList.contains(nameEdit)){
+            val msg1 = Message()
+            msg1.what = updateList1
+            handler.sendMessage(msg1)
+        }else{
+            println(nameEdit)
+        }
+    }
+
+    private fun initdepartment(){
+        val departmentArray = listOf("其他", "生产", "品管", "仓库", "财务")
         departmentSelect.text = departmentArray[0]
         departmentSelect.setOnClickListener {
             selector("工序名称", departmentArray){i ->
@@ -33,7 +151,7 @@ class RegEdit : AppCompatActivity() {
             }
         }
     }
-    fun saveUser(){
+    private fun saveUser(){
         var conn: Connection //一个成员变量
 
 //加载数据库驱动
@@ -70,18 +188,20 @@ class RegEdit : AppCompatActivity() {
                     conn = DriverManager.getConnection(url, user, password)
                     Log.d("MainActivity", "连接数据库成功!")
                     //添加数据到users表
+                    keyWord1.visibility = View.VISIBLE
+                    keyWord2.visibility = View.VISIBLE
                     val name = nameReg.text.toString()
-                    val keyword = keyWordReg.text.toString()
+                    val keyword1 = keyWord1.text.toString()
                     val departmentReg = departmentSelect.text.toString()
-                    val sql = "insert into  users(name, keyword, type) values('$name', '$keyword', '$departmentReg')"
+                    val sql = "insert into  users(name, keyword, type) values('$name', '$keyword1', '$departmentReg')"
                     try {
-                        // 创建用来执行sql语句的对象
-                        val statement: Statement = conn.createStatement()
-                        // 执行sql查询语句并获取查询信息
-                        val num = statement.executeUpdate(sql)
-                        if (num>0){
-                            Log.d("MainActivity", "成功写入数据")
-                        }
+                            // 创建用来执行sql语句的对象
+                            val statement: Statement = conn.createStatement()
+                            // 执行sql查询语句并获取查询信息
+                            val num = statement.executeUpdate(sql)
+                            if (num>0){
+                                Log.d("MainActivity", "成功写入数据")
+                            }
                     } catch (e: SQLException) {
                         Log.e("MainActivity", "写入错误")
                     }

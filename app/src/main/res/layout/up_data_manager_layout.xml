@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="40dp"
             android:text="增加新产品"
             android:background="@drawable/btm2bule"
             android:textSize="20sp"/>

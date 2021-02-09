@@ -86,6 +86,7 @@ class OutBound : BaseActivity(){
                     }
                     "吹塑" -> {
                         reFresh()
+                        outPingpiSearch.setText("")
                         initChuisuName()
                         initPingpiName()
                     }

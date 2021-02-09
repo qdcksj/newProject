@@ -466,6 +466,7 @@ class QueryOut : BaseActivity()  {
                         queryOutPingpiSearch.setText("不使用瓶坯")
                     }
                     "吹塑" -> {
+                        queryOutPingpiSearch.setText("")
                         initChuisuSpinner()
                         initPingpiName()
                     }
@@ -603,7 +604,7 @@ class QueryOut : BaseActivity()  {
                         mDay = dayOfMonth
                         val mDate = "${year}-${month + 1}-${dayOfMonth}"
                         // 将选择的日期赋值给TextView
-                        startDate.text = mDate
+                        startDateOut.text = mDate
                     },
                     mYear, mMonth, mDay
                 )
@@ -629,7 +630,7 @@ class QueryOut : BaseActivity()  {
                         mDay = dayOfMonth
                         val mDate = "${year}-${month + 1}-${dayOfMonth}"
                         // 将选择的日期赋值给TextView
-                        lastDate.text = mDate
+                        lastDateOut.text = mDate
                     },
                     mYear, mMonth, mDay
                 )

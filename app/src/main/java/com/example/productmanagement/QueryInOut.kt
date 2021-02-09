@@ -443,6 +443,7 @@ class QueryInOut : BaseActivity() {
                         inOutPingpiSearch.setText("不使用瓶坯")
                     }
                     "吹塑" -> {
+                        inOutPingpiSearch.setText("")
                         initChuisuSpinner()
                         initPingpiName()
                     }

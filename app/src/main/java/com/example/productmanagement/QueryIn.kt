@@ -468,6 +468,7 @@ private fun initTypeSpinner(){
                     queryInPingpiSearch.setText("不使用瓶坯")
                 }
                 "吹塑" -> {
+                    queryInPingpiSearch.setText("")
                     initChuisuSpinner()
                     initPingpiName()
                 }

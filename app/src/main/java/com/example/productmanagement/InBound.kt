@@ -55,6 +55,7 @@ class InBound : BaseActivity() {
                 when (lineSpiner.text) {
                     "吹塑" -> {
                         nameSerch.setText("")
+                        pingpiSerch.setText("")
                         initChuisuName()
                         initPingpiName()
                     }
